@@ -15,9 +15,16 @@ fn greet(name: &str) -> String {
 }
 
 #[tauri::command]
+fn get_registered_questionnaires() -> OperationResultStruct<RegisteredQuestionnaire> {
+    match json_handler::read_json(REGISTERED_QUESTIONNAIRES_FILE_PATH.to_string()).unwrap() {
+        Some(registered_questionnaire) => OperationResultStruct::new(OperationResult::Success, Some(registered_questionnaire)),
+        None => OperationResultStruct::new(OperationResult::Fail, None)
+    }
+}
+
+#[tauri::command]
 fn read_questionnaire(file_path: &str) -> OperationResultStruct<Questionnaire> {
-    let read_attempt = json_handler::read_json(file_path.to_string()).unwrap();
-    match read_attempt {
+    match json_handler::read_json(file_path.to_string()).unwrap() {
         Some(questionnaire) => OperationResultStruct::new(OperationResult::Success, Some(questionnaire)),
         None => OperationResultStruct::new(OperationResult::Fail, None)
     }
@@ -25,18 +32,25 @@ fn read_questionnaire(file_path: &str) -> OperationResultStruct<Questionnaire> {
 
 #[tauri::command]
 fn save_questionnaire(questionnaire: Questionnaire) -> OperationResultStruct<String> {
-    let save_attempt = json_handler::write_to_json(&questionnaire, questionnaire.file_path.clone());
-    match save_attempt {
+    match json_handler::write_to_json(&questionnaire, questionnaire.file_path.clone()) {
         Ok(()) => OperationResultStruct::new(OperationResult::Success, Some(String::from("Questionnaire save successfully"))),
         Err(err) => OperationResultStruct::new(OperationResult::Fail, Some(err.to_string()))
     }
 }
 
 fn main() {
-    tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet])
-        .invoke_handler(tauri::generate_handler![read_questionnaire])
-        .invoke_handler(tauri::generate_handler![save_questionnaire])
+    /*tauri::Builder::default()
+        //.invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![get_registered_questionnaires])
+        //.invoke_handler(tauri::generate_handler![read_questionnaire])
+        //.invoke_handler(tauri::generate_handler![save_questionnaire])
         .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+        .expect("error while running tauri application");*/
+    
+    let result: OperationResultStruct<RegisteredQuestionnaire> = match json_handler::read_json(REGISTERED_QUESTIONNAIRES_FILE_PATH.to_string()).unwrap() {
+        Some(registered_questionnaire) => OperationResultStruct::new(OperationResult::Success, Some(registered_questionnaire)),
+        None => OperationResultStruct::new(OperationResult::Fail, None)
+    };
+
+    println!("{:?}", result);
 }

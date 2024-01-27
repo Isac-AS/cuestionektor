@@ -50,27 +50,27 @@ impl Question {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Questionnaire {
     pub questions: Vec<Question>,
     pub name: String,
     pub file_path: String
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct RegisteredQuestionnaire {
     pub name: String,
     pub file_path: String,
     pub uploaded_file_path: Option<String>
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum OperationResult {
     Success,
     Fail
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct OperationResultStruct<T> {
     pub result: OperationResult,
     pub element: Option<T>
