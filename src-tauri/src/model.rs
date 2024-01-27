@@ -64,6 +64,27 @@ pub struct RegisteredQuestionnaire {
     pub uploaded_file_path: Option<String>
 }
 
+#[derive(Serialize, Deserialize)]
+pub enum OperationResult {
+    Success,
+    Fail
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct OperationResultStruct<T> {
+    pub result: OperationResult,
+    pub element: Option<T>
+}
+
+impl<T> OperationResultStruct<T> {
+    pub fn new(result: OperationResult, element: Option<T>) -> OperationResultStruct<T> {
+        OperationResultStruct {
+            result,
+            element
+        }
+    }
+}
+
 pub struct PdfParsingFilters {
     pub heading_re: Regex,
     pub possible_answer_re: Regex,

@@ -1,7 +1,7 @@
 use std::error::Error;
 use crate::model::{Answer, Question, PdfParsingFilters};
 
-pub fn extract_pdf(file_path: &String) -> Result<String, Box<dyn Error>> {
+fn extract_pdf(file_path: &String) -> Result<String, Box<dyn Error>> {
     let bytes = std::fs::read(file_path)?;
     Ok(pdf_extract::extract_text_from_mem(&bytes).unwrap())
 }
