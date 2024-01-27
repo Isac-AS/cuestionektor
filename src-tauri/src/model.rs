@@ -57,6 +57,13 @@ pub struct Questionnaire {
     pub file_path: String
 }
 
+#[derive(Serialize, Deserialize)]
+pub struct RegisteredQuestionnaire {
+    pub name: String,
+    pub file_path: String,
+    pub uploaded_file_path: Option<String>
+}
+
 pub struct PdfParsingFilters {
     pub heading_re: Regex,
     pub possible_answer_re: Regex,

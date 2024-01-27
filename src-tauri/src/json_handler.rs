@@ -1,22 +1,26 @@
+use serde::{de::DeserializeOwned, Serialize};
 use serde_json;
-use std::{fs::{self, File, OpenOptions}, io::{BufWriter, Write}};
-use crate::model::Questionnaire;
+use std::{fs::{self, OpenOptions}, io::Write};
 
-
-pub fn write_questionnaire(questionnaire: Questionnaire) -> std::io::Result<()> {
-    let json_string = serde_json::to_string_pretty(&questionnaire)?;
+/// Will write a serializable element into the provided file path
+///
+/// # Errors
+/// std::io::ErrorKind
+/// This function will return an error if it cannot open or create the file.
+pub fn write_to_json<T: Serialize>(serializable_element: T, file_path: String) -> std::io::Result<()> {
+    let json_string = serde_json::to_string_pretty(&serializable_element)?;
     
     let mut file = OpenOptions::new()
         .write(true)
         .create(true)
-        .open(&questionnaire.file_path)?;
+        .open(file_path)?;
 
     file.write_all(json_string.as_bytes())?;
     Ok(())
 }
 
-pub fn read_questionnaire(file_path: String) -> Option<Questionnaire> {
-    let json_string = match fs::read_to_string(file_path) {
+pub fn read_json<T: DeserializeOwned>(file_path: String) -> Option<T> {
+    let json_string: String = match fs::read_to_string(file_path) {
         Ok(content) => content,
         Err(err) => {
             eprintln!("Error reading file: {}", err);
@@ -24,9 +28,9 @@ pub fn read_questionnaire(file_path: String) -> Option<Questionnaire> {
         }
     };
 
-    let questionnaire = serde_json::from_str(&json_string);
+    let deserialized_json = serde_json::from_str(&json_string);
     
-    match questionnaire {
+    match deserialized_json {
         Ok(successful) => successful,
         Err(err) => {
             eprintln!("Error deserializing JSON: {}", err);
