@@ -91,6 +91,18 @@ button {
   gap: 3em;
 }
 
+.card {
+    padding: 2em;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+    gap: 2em;
+    align-items: center;
+    max-width: 700px;
+}
+
+.w-100 {
+	width: 100%;
+}
+
 a,
 a:visited,
 a:active {

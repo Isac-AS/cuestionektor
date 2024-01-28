@@ -46,7 +46,7 @@
         }
     }
 }
-
+		
 .app {
 	display: flex;
 

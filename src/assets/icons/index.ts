@@ -5,6 +5,7 @@ import close from './close.svg';
 import done from './done.svg';
 import error from './error.svg';
 import expand from './expand.svg';
+import file from './file.svg';
 import home from './home.svg';
 import menu from './menu.svg';
 import question from './question.svg';
@@ -19,6 +20,7 @@ const icons = {
     done: done,
     error: error,
     expand: expand,
+    file: file,
     home: home,
     menu: menu,
     question: question,

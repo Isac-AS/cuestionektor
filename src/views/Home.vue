@@ -46,7 +46,7 @@ onMounted(() => {
                     <h3>Crear a partir de un fichero</h3>
                     Sube un fichero
                     <router-link to="/create-from-file" class="button">
-                        <img :src="icons.add" class="icon">
+                        <img :src="icons.file" class="icon">
                         <span class="text">Subir un fichero</span>
                     </router-link>
                 </div>
@@ -68,9 +68,6 @@ onMounted(() => {
 
 .no-questionnaire-card-container {
     gap: 10em;
-    margin-top: auto;
-    margin-bottom: auto;
-    flex-grow: 1;
 }
 
 .no-questionnaire-card {

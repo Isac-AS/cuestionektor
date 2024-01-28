@@ -57,12 +57,33 @@ pub struct Questionnaire {
     pub file_path: String
 }
 
+impl Questionnaire {
+    pub fn new(questions: Vec<Question>, name: String, file_path: String) -> Questionnaire {
+        Questionnaire {
+            questions,
+            name,
+            file_path
+        }
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct RegisteredQuestionnaire {
     pub name: String,
     pub file_path: String,
     pub uploaded_file_path: Option<String>,
     pub was_opened: bool
+}
+
+impl RegisteredQuestionnaire {
+    pub fn new(name: String, file_path: String, uploaded_file_path: Option<String>, was_opened: bool) -> RegisteredQuestionnaire {
+        RegisteredQuestionnaire {
+            name,
+            file_path,
+            uploaded_file_path,
+            was_opened
+        }
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]

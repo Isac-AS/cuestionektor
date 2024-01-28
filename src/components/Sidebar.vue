@@ -34,7 +34,7 @@ const ToggleMenu = () => {
                 <span class="text">Crear cuestionario</span>
             </router-link>
             <router-link to="/create-from-file" class="sidebar-button">
-                <img :src="icons.add" class="icon">
+                <img :src="icons.file" class="icon">
                 <span class="text">Subir un fichero</span>
             </router-link>
             <router-link to="/manage" class="sidebar-button">
