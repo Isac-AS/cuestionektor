@@ -1,45 +1,58 @@
 <script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import Greet from "./components/Greet.vue";
-import { invoke } from "@tauri-apps/api/tauri";
-import { onMounted, ref } from "vue";
-import { RegisteredQuestionnaire } from "./models";
-
-const registered_questionnaires = ref<RegisteredQuestionnaire>();
-
-async function get_questionnaires() {
-  registered_questionnaires.value = await invoke("get_registered_questionnaires");
-  console.log(registered_questionnaires)
-}
-
-onMounted(() => {
-  get_questionnaires();
-})
+import Sidebar from './components/Sidebar.vue'
 </script>
 
 <template>
-  <header>
-    <h1>
-    Cuestionektor
-    </h1>
-  </header>
-  <nav>
-    <ul>Nuevo cuestionario</ul>
-    <ul>Ordenar por</ul>
-  </nav>
-  <div>
-    {{ registered_questionnaires }}
-  </div>
-  <Greet></Greet>
+	<div class="app">
+		<!-- Sidebar -->
+		<Sidebar />
+
+		<!-- Content -->
+		<router-view />
+	</div>
 </template>
 
-<style scoped>
-.logo.vite:hover {
-  filter: drop-shadow(0 0 2em #747bff);
+
+<style lang="scss">
+:root {
+	--primary: #4ade80;
+	--primary-alt: #22c55e;
+	--grey: #64748b;
+	--dark: #1e293b;
+	--dark-alt: #334155;
+	--light: #f1f5f9;
+	--sidebar-width: 300px;
 }
 
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #249b73);
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Fira sans', sans-serif;
+}
+
+body {
+	background: var(--light);
+}
+
+button {
+	cursor: pointer;
+	appearance: none;
+	border: none;
+	outline: none;
+	background: none;
+}
+
+.app {
+	display: flex;
+
+	main {
+		flex: 1 1 0;
+		padding: 2rem;
+
+		@media (max-width: 1024px) {
+			padding-left: 6rem;
+		}
+	}
 }
 </style>

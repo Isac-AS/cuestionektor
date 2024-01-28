@@ -1,11 +1,12 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use model::{OperationResultStruct, OperationResult, PdfParsingFilters, Questionnaire, RegisteredQuestionnaire};
+use model::{OperationResultStruct, OperationResult, PdfParsingFilters, Questionnaire, RegisteredQuestionnaire, RegisteredQuestionnaires};
 mod pdf_parser;
 mod json_handler;
 mod model;
 
+const QUESTIONNAIRE_DIRECTORY: &str = "./questionnaires/";
 const REGISTERED_QUESTIONNAIRES_FILE_PATH: &str = "questionnaires/registered_questionnaires.json";
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
@@ -15,8 +16,8 @@ fn greet(name: &str) -> String {
 }
 
 #[tauri::command]
-fn get_registered_questionnaires() -> OperationResultStruct<RegisteredQuestionnaire> {
-    match json_handler::read_json(REGISTERED_QUESTIONNAIRES_FILE_PATH.to_string()).unwrap() {
+fn get_registered_questionnaires() -> OperationResultStruct<RegisteredQuestionnaires> {
+    match json_handler::read_json(REGISTERED_QUESTIONNAIRES_FILE_PATH.to_string()) {
         Some(registered_questionnaire) => OperationResultStruct::new(OperationResult::Success, Some(registered_questionnaire)),
         None => OperationResultStruct::new(OperationResult::Fail, None)
     }
@@ -24,7 +25,7 @@ fn get_registered_questionnaires() -> OperationResultStruct<RegisteredQuestionna
 
 #[tauri::command]
 fn read_questionnaire(file_path: &str) -> OperationResultStruct<Questionnaire> {
-    match json_handler::read_json(file_path.to_string()).unwrap() {
+    match json_handler::read_json(file_path.to_string()) {
         Some(questionnaire) => OperationResultStruct::new(OperationResult::Success, Some(questionnaire)),
         None => OperationResultStruct::new(OperationResult::Fail, None)
     }
@@ -39,18 +40,14 @@ fn save_questionnaire(questionnaire: Questionnaire) -> OperationResultStruct<Str
 }
 
 fn main() {
-    /*tauri::Builder::default()
-        //.invoke_handler(tauri::generate_handler![greet])
-        .invoke_handler(tauri::generate_handler![get_registered_questionnaires])
-        //.invoke_handler(tauri::generate_handler![read_questionnaire])
-        //.invoke_handler(tauri::generate_handler![save_questionnaire])
+    json_handler::check_json_dir(&QUESTIONNAIRE_DIRECTORY, &REGISTERED_QUESTIONNAIRES_FILE_PATH);
+    tauri::Builder::default()
+        .invoke_handler(tauri::generate_handler![
+            greet,
+            get_registered_questionnaires,
+            read_questionnaire,
+            save_questionnaire
+        ])
         .run(tauri::generate_context!())
-        .expect("error while running tauri application");*/
-    
-    let result: OperationResultStruct<RegisteredQuestionnaire> = match json_handler::read_json(REGISTERED_QUESTIONNAIRES_FILE_PATH.to_string()).unwrap() {
-        Some(registered_questionnaire) => OperationResultStruct::new(OperationResult::Success, Some(registered_questionnaire)),
-        None => OperationResultStruct::new(OperationResult::Fail, None)
-    };
-
-    println!("{:?}", result);
+        .expect("error while running tauri application");
 }

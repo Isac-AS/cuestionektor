@@ -61,7 +61,21 @@ pub struct Questionnaire {
 pub struct RegisteredQuestionnaire {
     pub name: String,
     pub file_path: String,
-    pub uploaded_file_path: Option<String>
+    pub uploaded_file_path: Option<String>,
+    pub was_opened: bool
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct RegisteredQuestionnaires {
+    pub questionnaires: Vec<RegisteredQuestionnaire>,
+}
+
+impl RegisteredQuestionnaires {
+    pub fn new_empty() -> RegisteredQuestionnaires{
+        RegisteredQuestionnaires {
+            questionnaires: Vec::new()
+        }
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]
