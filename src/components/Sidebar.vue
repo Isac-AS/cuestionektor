@@ -1,15 +1,7 @@
-<script lang="ts">
-// Icons
-import { icons } from '../assets/icons';
-
-export default {
-    components: icons,
-};
-</script>
-
 <script setup lang="ts">
 import { ref } from 'vue'
 import logoURL from '../assets/logo.png';
+import icons from '../assets/icons';
 
 
 const is_expanded = ref(localStorage.getItem("is_expanded") === "true");
@@ -28,7 +20,7 @@ const ToggleMenu = () => {
 
         <div class="menu-toggle-wrap">
             <button class="menu-toggle" @click="ToggleMenu">
-                <img :src="icons.arrow" class="icon">
+                <img :src="icons.arrow_right" class="icon">
             </button>
         </div>
 
@@ -36,14 +28,20 @@ const ToggleMenu = () => {
         <div class="menu">
             <router-link to="/" class="button">
                 <img :src="icons.home" class="icon">
-                <component :is="icons.home"/>
                 <span class="text">Inicio</span>
             </router-link>
             <router-link to="/create" class="button">
-                <img :src="icons.home()" class="icon">
+                <img :src="icons.add" class="icon">
                 <span class="text">Crear cuestionario</span>
             </router-link>
-            {{ icons.add }}
+            <router-link to="/create" class="button">
+                <img :src="icons.settings" class="icon">
+                <span class="text">Gestionar cuestionarios</span>
+            </router-link>
+            <router-link to="/create" class="button">
+                <img :src="icons.add" class="icon">
+                <span class="text">Crear cuestionario</span>
+            </router-link>
         </div>
     </aside>
 </template>
@@ -69,8 +67,10 @@ aside {
     }
 
     .logo {
-        margin-bottom: 1rem;
-
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 2em;
         img {
             width: 2rem;
         }
@@ -84,7 +84,7 @@ aside {
 
     .menu-toggle-wrap {
         display: flex;
-        justify-content: flex-end;
+        justify-content: center;
 
         position: relative;
         top: 0;
@@ -96,7 +96,7 @@ aside {
             &:hover {
                 .icon {
                     color: var(--primary);
-                    //transform: translateX(0.5rem);
+                    transform: translateX(0.5rem);
                 }
             }
         }
@@ -172,7 +172,6 @@ aside {
         width: var(--sidebar-width);
 
         .menu-toggle-wrap {
-            top: -3rem;
 
             .menu-toggle {
                 transform: rotate(-180deg);

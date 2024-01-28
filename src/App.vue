@@ -15,24 +15,13 @@
 
 <style lang="scss">
 :root {
-	--primary: #4ade80;
-	--primary-alt: #22c55e;
+	--primary: #FA7D09;
+	--primary-alt: #b3944d;
 	--grey: #64748b;
 	--dark: #1e293b;
 	--dark-alt: #334155;
 	--light: #f1f5f9;
-	--sidebar-width: 300px;
-}
-
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-	font-family: 'Fira sans', sans-serif;
-}
-
-body {
-	background: var(--light);
+	--sidebar-width: 350px;
 }
 
 button {

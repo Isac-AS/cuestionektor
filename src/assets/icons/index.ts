@@ -1,17 +1,27 @@
-// src/components/icons/index.ts
+import add from './add.svg';
+import arrow_left from './arrow_left.svg';
+import arrow_right from './arrow_right.svg';
+import close from './close.svg';
+import done from './done.svg';
+import error from './error.svg';
+import expand from './expand.svg';
+import home from './home.svg';
+import menu from './menu.svg';
+import search from './search.svg';
+import settings from './settings.svg';
 
-// Import all SVG files in the 'icons' folder dynamically
-const svgFilesContext = import.meta.glob('./*.svg');
+const icons = {
+    add: add,
+    arrow_left: arrow_left,
+    arrow_right: arrow_right,
+    close: close,
+    done: done,
+    error: error,
+    expand: expand,
+    home: home,
+    menu: menu,
+    search: search,
+    settings: settings,
+}
 
-// Create an object to store the imported icons
-const icons: Record<string, any> = {};
-
-// Dynamically import each SVG file and add it to the 'icons' object
-Object.keys(svgFilesContext).forEach((key: string) => {
-  const iconName = key.replace(/^.+\/([^/]+)\.svg$/, '$1');
-  icons[iconName] = () => svgFilesContext[key]();
-});
-
-// Export the 'icons' object
-export { icons };
-
+export default icons;
