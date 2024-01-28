@@ -62,7 +62,7 @@ pub fn check_json_dir(directory_path: &str, questionnaires_file: &str) {
                 Err(err) => eprintln!("Attempting to create registered_questionnaires.json: {}", err),
             }
         }
-    } else if !fs::metadata(&directory_path).is_ok() {
+    } else if !fs::metadata(&questionnaires_file).is_ok() {
         let new_registered_questionnaire_list = RegisteredQuestionnaires::new_empty();
         match write_to_json(
             new_registered_questionnaire_list,

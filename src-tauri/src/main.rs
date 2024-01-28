@@ -7,7 +7,7 @@ mod json_handler;
 mod model;
 
 const QUESTIONNAIRE_DIRECTORY: &str = "./questionnaires/";
-const REGISTERED_QUESTIONNAIRES_FILE_PATH: &str = "questionnaires/registered_questionnaires.json";
+const REGISTERED_QUESTIONNAIRES_FILE_PATH: &str = "./questionnaires/registered_questionnaires.json";
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
