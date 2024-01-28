@@ -3,7 +3,6 @@ import { ref } from 'vue'
 import logoURL from '../assets/logo.png';
 import icons from '../assets/icons';
 
-
 const is_expanded = ref(localStorage.getItem("is_expanded") === "true");
 
 const ToggleMenu = () => {
@@ -26,21 +25,21 @@ const ToggleMenu = () => {
 
         <h3>Menu</h3>
         <div class="menu">
-            <router-link to="/" class="button">
+            <router-link to="/" class="sidebar-button">
                 <img :src="icons.home" class="icon">
                 <span class="text">Inicio</span>
             </router-link>
-            <router-link to="/create" class="button">
+            <router-link to="/create" class="sidebar-button">
                 <img :src="icons.add" class="icon">
                 <span class="text">Crear cuestionario</span>
             </router-link>
-            <router-link to="/create" class="button">
+            <router-link to="/create-from-file" class="sidebar-button">
+                <img :src="icons.add" class="icon">
+                <span class="text">Subir un fichero</span>
+            </router-link>
+            <router-link to="/manage" class="sidebar-button">
                 <img :src="icons.settings" class="icon">
                 <span class="text">Gestionar cuestionarios</span>
-            </router-link>
-            <router-link to="/create" class="button">
-                <img :src="icons.add" class="icon">
-                <span class="text">Crear cuestionario</span>
             </router-link>
         </div>
     </aside>
@@ -48,6 +47,14 @@ const ToggleMenu = () => {
 
 
 <style lang="scss" scoped>
+button {
+	cursor: pointer;
+	appearance: none;
+	border: none;
+	outline: none;
+	background: none;
+}
+
 aside {
     display: flex;
     flex-direction: column;
@@ -71,6 +78,7 @@ aside {
         width: 100%;
         justify-content: center;
         margin-bottom: 2em;
+
         img {
             width: 2rem;
         }
@@ -103,7 +111,7 @@ aside {
     }
 
     h3,
-    .button .text {
+    .sidebar-button .text {
         opacity: 0;
         transition: opacity 0.3s ease-in-out;
     }
@@ -118,7 +126,7 @@ aside {
     .menu {
         margin: 0 -1rem;
 
-        .button {
+        .sidebar-button {
             display: flex;
             align-items: center;
             text-decoration: none;
@@ -179,11 +187,11 @@ aside {
         }
 
         h3,
-        .button .text {
+        .sidebar-button .text {
             opacity: 1;
         }
 
-        .button {
+        .sidebar-button {
             .icon {
                 margin-right: 1rem;
             }

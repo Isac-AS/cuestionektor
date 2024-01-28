@@ -1,15 +1,22 @@
 <script setup lang="ts">
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import Greet from "../components/Greet.vue";
 import { invoke } from "@tauri-apps/api/tauri";
 import { onMounted, ref } from "vue";
-import { RegisteredQuestionnaire } from "../models";
+import { RegisteredQuestionnaire, RegisteredQuestionnaires, OperationResultStruct, OperationResult } from "../models";
+import icons from '../assets/icons/'
 
-const registered_questionnaires = ref<RegisteredQuestionnaire>();
+const registered_questionnaires = ref<RegisteredQuestionnaire[]>();
+const no_registered_questionnaires = ref<boolean>(false);
 
 async function get_questionnaires() {
-    registered_questionnaires.value = await invoke("get_registered_questionnaires");
-    console.log(registered_questionnaires.element)
+    let questionnaires_attempt = await invoke<OperationResultStruct<RegisteredQuestionnaires>>("get_registered_questionnaires");
+    if (questionnaires_attempt.result == OperationResult.Fail) {
+        alert("Error fetching questionnaires");
+        return;
+    }
+    registered_questionnaires.value = questionnaires_attempt.element.questionnaires;
+    if (registered_questionnaires.value.length <= 0) {
+        no_registered_questionnaires.value = true;
+    }
 }
 
 onMounted(() => {
@@ -18,16 +25,36 @@ onMounted(() => {
 </script>
 
 <template>
-    <div id="home_page">
+    <div id="home_page" class="column-nowrap">
         <header>
             <h1>
                 Cuestionektor
             </h1>
         </header>
-        <div>
-            {{ registered_questionnaires }}
+        <div v-if="no_registered_questionnaires" class="column-nowrap jcc aic gap">
+            <h2>No hay cuestionarios registrados</h2>
+            <div class="row-nowrap no-questionnaire-card-container">
+                <div class="column-nowrap no-questionnaire-card">
+                    <h3>Crea un cuestionario a mano</h3>
+                    Para cuestionarios pequeños
+                    <router-link to="/create" class="button">
+                        <img :src="icons.add" class="icon">
+                        <span class="text">Crear un cuesitonario</span>
+                    </router-link>
+                </div>
+                <div class="column-nowrap no-questionnaire-card">
+                    <h3>Crear a partir de un fichero</h3>
+                    Sube un fichero
+                    <router-link to="/create-from-file" class="button">
+                        <img :src="icons.add" class="icon">
+                        <span class="text">Subir un fichero</span>
+                    </router-link>
+                </div>
+            </div>
         </div>
-        <Greet></Greet>
+        <div v-else>
+
+        </div>
     </div>
 </template>
 
@@ -35,8 +62,21 @@ onMounted(() => {
 #home_page {
     width: 100%;
     padding: 2rem;
-    display: flex;
-    flex-flow: column nowrap;
+    align-items: center;
+    gap: 3em;
+}
+
+.no-questionnaire-card-container {
+    gap: 10em;
+    margin-top: auto;
+    margin-bottom: auto;
+    flex-grow: 1;
+}
+
+.no-questionnaire-card {
+    padding: 2em;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+    gap: 2em;
     align-items: center;
 }
 </style>

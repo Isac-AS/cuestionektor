@@ -11,6 +11,18 @@ const routes = [
 		path: '/create',
 		component: () => import('../views/Create.vue')
 	},
+	{
+		path: '/create-from-file',
+		component: () => import('../views/UploadFile.vue')
+	},
+	{
+		path: '/manage',
+		component: () => import('../views/Manage.vue')
+	},
+	{
+		path: '/questionnaire',
+		component: () => import('../views/Questionnaire.vue')
+	},
 ]
 
 const router = createRouter({

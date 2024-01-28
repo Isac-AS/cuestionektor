@@ -22,7 +22,11 @@ export interface Questionnaire {
 export interface RegisteredQuestionnaire {
     name: String,
     file_path: String,
-    uploaded_file_path: Option<String>
+    uploaded_file_path: String
+}
+
+export interface RegisteredQuestionnaires {
+    questionnaires: Array<RegisteredQuestionnaire>,
 }
 
 export enum OperationResult {
@@ -32,10 +36,5 @@ export enum OperationResult {
 
 export interface OperationResultStruct<T> {
     result: OperationResult,
-    element: Option<T>
-}
-
-export interface Option<T> {
-    Some: T,
-    None: null
+    element: T
 }

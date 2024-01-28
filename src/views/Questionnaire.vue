@@ -22,7 +22,7 @@ onMounted(() => {
     <div class="page column-nowrap">
         <header>
             <h1>
-                Crea un cuestionario   
+                Cuestionario: 
             </h1>
         </header>
         <nav>

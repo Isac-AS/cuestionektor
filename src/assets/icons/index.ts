@@ -7,6 +7,7 @@ import error from './error.svg';
 import expand from './expand.svg';
 import home from './home.svg';
 import menu from './menu.svg';
+import question from './question.svg';
 import search from './search.svg';
 import settings from './settings.svg';
 
@@ -20,6 +21,7 @@ const icons = {
     expand: expand,
     home: home,
     menu: menu,
+    question: question,
     search: search,
     settings: settings,
 }
