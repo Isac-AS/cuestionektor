@@ -1,6 +1,9 @@
 use serde::{de::DeserializeOwned, Serialize};
 use serde_json;
-use std::{fs::{self, OpenOptions}, io::Write};
+use std::{
+    fs::{self, OpenOptions},
+    io::Write,
+};
 
 use crate::model::{RegisteredQuestionnaire, RegisteredQuestionnaires};
 
@@ -9,9 +12,12 @@ use crate::model::{RegisteredQuestionnaire, RegisteredQuestionnaires};
 /// # Errors
 /// std::io::ErrorKind
 /// This function will return an error if it cannot open or create the file.
-pub fn write_to_json<T: Serialize>(serializable_element: T, file_path: String) -> std::io::Result<()> {
+pub fn write_to_json<T: Serialize>(
+    serializable_element: T,
+    file_path: String,
+) -> std::io::Result<()> {
     let json_string = serde_json::to_string_pretty(&serializable_element)?;
-    
+
     let mut file = OpenOptions::new()
         .write(true)
         .create(true)
@@ -31,7 +37,7 @@ pub fn read_json<T: DeserializeOwned>(file_path: String) -> Option<T> {
     };
 
     let deserialized_json = serde_json::from_str(&json_string.as_str());
-    
+
     match deserialized_json {
         Ok(successful) => successful,
         Err(err) => {
@@ -48,10 +54,22 @@ pub fn check_json_dir(directory_path: &str, questionnaires_file: &str) {
             eprintln!("Error creating directory: {}", err);
         } else {
             let new_registered_questionnaire_list = RegisteredQuestionnaires::new_empty();
-            match write_to_json(new_registered_questionnaire_list, questionnaires_file.to_string()) {
+            match write_to_json(
+                new_registered_questionnaire_list,
+                questionnaires_file.to_string(),
+            ) {
                 Ok(()) => println!("Empty file created successfully"),
-                Err(err) => eprintln!("{}", err)
+                Err(err) => eprintln!("Attempting to create registered_questionnaires.json: {}", err),
             }
+        }
+    } else if !fs::metadata(&directory_path).is_ok() {
+        let new_registered_questionnaire_list = RegisteredQuestionnaires::new_empty();
+        match write_to_json(
+            new_registered_questionnaire_list,
+            questionnaires_file.to_string(),
+        ) {
+            Ok(()) => println!("Empty file created successfully"),
+            Err(err) => eprintln!("Attempting to create registered_questionnaires.json: {}", err),
         }
     }
 }

@@ -19,7 +19,6 @@ fn greet(name: &str) -> String {
 fn upload_pdf(uploaded_file_path: &str, name: &str) -> OperationResultStruct<String> {
     // Extract questions from pdf
     let questions = pdf_parser::parse_pdf(uploaded_file_path.to_string(), PdfParsingFilters::new());
-    
     // Declare some later used variables
     let questionnaire_name: String = String::from(name);
     let questionnaire_file_path: String = format!("{}{}.json", QUESTIONNAIRE_DIRECTORY, name);

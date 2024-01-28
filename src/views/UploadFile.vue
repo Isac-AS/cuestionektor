@@ -30,10 +30,7 @@ async function uploadPdf() {
         return;
     }
 
-    let file_path = "./uploaded-files/" + uploaded_pdf_file.name;
-    await writeBinaryFile(file_path, uploaded_pdf_file);
-
-    let pdf_result = await invoke<OperationResultStruct<String>>("upload_pdf", { uploaded_file_path: file_path, name: pdf_file_name.value });
+    let pdf_result = await invoke<OperationResultStruct<String>>("upload_pdf", { uploadedFilePath: uploaded_pdf_file, name: pdf_file_name.value });
 
     if (pdf_result.result == OperationResult.Fail) {
         alert("Error al procesar el pdf.");
