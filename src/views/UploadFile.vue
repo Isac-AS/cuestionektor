@@ -4,6 +4,7 @@ import { OperationResult, OperationResultStruct } from "../models";
 import { open } from "@tauri-apps/api/dialog";
 import { writeBinaryFile,  } from "@tauri-apps/api/fs";
 import { ref } from "vue";
+import { parsePdf } from "../services/endpoints.service";
 
 let uploaded_pdf_file: any = null;
 const pdf_file_name = ref('');
@@ -29,15 +30,9 @@ async function uploadPdf() {
         alert("Dale un nombre al cuestionario");
         return;
     }
+    
+    let result: boolean = await parsePdf(uploaded_pdf_file, pdf_file_name.value);
 
-    let pdf_result = await invoke<OperationResultStruct<String>>("upload_pdf", { uploadedFilePath: uploaded_pdf_file, name: pdf_file_name.value });
-
-    if (pdf_result.result == OperationResult.Fail) {
-        alert("Error al procesar el pdf.");
-        return;
-    } else if (pdf_result.result == OperationResult.Success) {
-        alert("Cuestionario guardado y procesado con exito")
-    }
 }
 
 async function handleTxtUpload() {
