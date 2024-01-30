@@ -53,9 +53,13 @@ onMounted(() => {
             </div>
         </div>
         <div v-else>
-            <h1>
+            <h1 class="bg-primary">
                 cuestionarios
             </h1>
+            <div class="flex">
+
+                <button class="rounded bg-primary">Some example button</button>
+            </div>
         </div>
     </div>
 </template>
