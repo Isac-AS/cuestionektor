@@ -27,7 +27,7 @@ onMounted(() => {
 <template>
     <div id="home_page" class="column-nowrap">
         <header>
-            <h1>
+            <h1 class="text-3xl font-bold">
                 Cuestionektor
             </h1>
         </header>
@@ -53,7 +53,9 @@ onMounted(() => {
             </div>
         </div>
         <div v-else>
-
+            <h1>
+                cuestionarios
+            </h1>
         </div>
     </div>
 </template>

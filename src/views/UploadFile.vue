@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { invoke } from "@tauri-apps/api/tauri";
-import { OperationResult, OperationResultStruct } from "../models";
 import { open } from "@tauri-apps/api/dialog";
-import { writeBinaryFile,  } from "@tauri-apps/api/fs";
 import { ref } from "vue";
 import { parsePdf } from "../services/endpoints.service";
 
@@ -32,6 +29,7 @@ async function uploadPdf() {
     }
     
     let result: boolean = await parsePdf(uploaded_pdf_file, pdf_file_name.value);
+    console.log(result)
 
 }
 
