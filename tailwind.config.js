@@ -39,7 +39,7 @@ export default {
 
             // White mode colors
             wm: {
-              background: '#121212',
+              background: '#FFFFFF',
               surface: {
                 DEFAULT: '#e5e5e5'
               },
