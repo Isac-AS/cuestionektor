@@ -19,7 +19,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="page column-nowrap">
+    <div class="w-full">
         <header>
             <h1>
                 Cuestionario: 

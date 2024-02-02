@@ -4,10 +4,10 @@ import icons from '../assets/icons';
 </script>
 
 <template>
-    <div class="flex h-[56px] lg:h-[80px] items-center bg-surface-dp24 shadow-md justify-between">
+    <div class="flex h-14 lg:h-16 items-center bg-surface-dp24 shadow-md justify-between">
         <div class="">
             <router-link to="/">
-                <img :src="logoURL" class="h-[56px] lg:h-[90px] ml-1" alt="Cuestionektor logo" />
+                <img :src="logoURL" class="h-14 lg:h-16 ml-1" alt="Cuestionektor logo" />
             </router-link>
         </div>
         <div class="flex">
