@@ -26,16 +26,14 @@ onMounted(() => {
 
 <template>
     <div class="flex flex-col items-center w-full">
-        <header>
-            <h1 class="text-3xl font-bold">
-                Cuestionektor
-            </h1>
-        </header>
-        <div v-if="no_registered_questionnaires" class="column-nowrap jcc aic gap">
-            <h2>No hay cuestionarios registrados</h2>
-            <div class="row-nowrap no-questionnaire-card-container">
-                <div class="column-nowrap no-questionnaire-card">
-                    <h3>Crea un cuestionario a mano</h3>
+        <h1 class="text-5xl font-bold mt-5">
+            Cuestionektor
+        </h1>
+        <div v-if="no_registered_questionnaires" class="flex flex-col items-center mt-7 gap-10">
+            <h2 class="text-2xl font-semibold">No hay cuestionarios registrados</h2>
+            <div class="grid grid-cols-2 gap-10">
+                <div class="bg-surface-dp6 rounded p-2 shadow-lg">
+                    <h3 class="text-xl">Crea un cuestionario a mano</h3>
                     Para cuestionarios pequeños
                     <router-link to="/create" class="button">
                         <img :src="icons.add" class="icon">

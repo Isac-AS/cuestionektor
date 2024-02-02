@@ -21,19 +21,19 @@ const ToggleMenu = () => {
         <div class="flex flex-col gap-1">
             <router-link to="/" class="sidebar-button">
                 <img :src="icons.home" class="invert w-6">
-                <span :class="`${is_expanded ? '' : 'hidden'}`" class="transition-all duration-1000">Inicio</span>
+                <span :class="`${is_expanded ? '' : 'hidden'}`">Inicio</span>
             </router-link>
             <router-link to="/create" class="sidebar-button">
                 <img :src="icons.add" class="invert w-6">
-                <span :class="`${is_expanded ? '' : 'hidden'}`" class="transition-all duration-1000">Crear cuestionario</span>
+                <span :class="`${is_expanded ? '' : 'hidden'}`">Crear cuestionario</span>
             </router-link>
             <router-link to="/create-from-file" class="sidebar-button">
                 <img :src="icons.file" class="invert w-6">
-                <span :class="`${is_expanded ? '' : 'hidden'}`" class="transition-all duration-1000">Subir un fichero</span>
+                <span :class="`${is_expanded ? '' : 'hidden'}`">Subir un fichero</span>
             </router-link>
             <router-link to="/manage" class="sidebar-button">
                 <img :src="icons.settings" class="invert w-6">
-                <span :class="`${is_expanded ? '' : 'hidden'}`" class="transition-all duration-1000">Gestionar cuestionarios</span>
+                <span :class="`${is_expanded ? '' : 'hidden'}`">Gestionar cuestionarios</span>
             </router-link>
         </div>
     </aside>
