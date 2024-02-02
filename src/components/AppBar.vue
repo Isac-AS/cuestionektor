@@ -7,7 +7,7 @@ import icons from '../assets/icons';
     <div class="flex h-[56px] lg:h-[80px] items-center bg-surface-dp24 shadow-md justify-between">
         <div class="">
             <router-link to="/">
-                <img :src="logoURL" class="h-[56px] lg:h-[80px]" alt="Cuestionektor logo" />
+                <img :src="logoURL" class="h-[56px] lg:h-[90px] ml-1" alt="Cuestionektor logo" />
             </router-link>
         </div>
         <div class="flex">

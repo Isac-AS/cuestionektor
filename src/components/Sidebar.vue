@@ -11,7 +11,7 @@ const ToggleMenu = () => {
 </script>
 
 <template>
-    <aside :class="`${is_expanded ? 'w-[350px]' : 'w-[80px]'}`"
+    <aside :class="`${is_expanded ? 'w-[400px]' : 'w-[100px]'}`"
         class="flex flex-col dark:bg-surface-dp6 shadow transition-all duration-300 items-center">
 
         <button @click="ToggleMenu" class="my-5 p-2 w-4/5 flex justify-center rounded bg-surface-dp12 shadow-lg transition-all hover:bg-surface-dp24 duration-200">
@@ -41,7 +41,7 @@ const ToggleMenu = () => {
 
 <style lang="scss" scoped>
 .sidebar-button {
-    @apply flex items-center transition-all duration-200 hover:bg-primary/30 p-2 my-1 gap-4 rounded-md;
+    @apply flex items-center transition-all duration-200 hover:bg-primary/30 p-2 m-1 gap-4 rounded-md;
 
     &.router-link-exact-active {
         @apply bg-primary/30 border-r-4 border-solid border-primary;

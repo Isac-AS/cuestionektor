@@ -25,7 +25,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div id="home_page" class="column-nowrap">
+    <div class="flex flex-col items-center w-full">
         <header>
             <h1 class="text-3xl font-bold">
                 Cuestionektor
@@ -63,23 +63,3 @@ onMounted(() => {
         </div>
     </div>
 </template>
-
-<style scoped>
-#home_page {
-    width: 100%;
-    padding: 2rem;
-    align-items: center;
-    gap: 3em;
-}
-
-.no-questionnaire-card-container {
-    gap: 10em;
-}
-
-.no-questionnaire-card {
-    padding: 2em;
-    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
-    gap: 2em;
-    align-items: center;
-}
-</style>

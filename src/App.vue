@@ -5,13 +5,9 @@
 
 <template>
 	<div class="app flex flex-col h-full">
-
 		<AppBar />	
 		<div class="flex h-full">
-			<!-- Sidebar -->
 			<Sidebar />
-	
-			<!-- Content -->
 			<router-view />
 		</div>
 	</div>

@@ -39,7 +39,7 @@ async function handleTxtUpload() {
 </script>
 
 <template>
-    <div class="page column-nowrap">
+    <div class="page column-nowrap w-full">
         <header>
             <h1>
                 Sube un fichero
