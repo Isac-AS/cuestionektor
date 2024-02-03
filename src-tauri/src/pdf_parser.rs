@@ -1,14 +1,16 @@
 use std::error::Error;
 use log::info;
 
-use crate::model::{Answer, Question, PdfParsingFilters};
+use crate::models::{parsing_utils::ParsingFilters, questionnaire::{Answer, Question}};
+
+
 
 fn extract_pdf(file_path: &String) -> Result<String, Box<dyn Error>> {
     let bytes = std::fs::read(file_path)?;
     Ok(pdf_extract::extract_text_from_mem(&bytes).unwrap())
 }
 
-pub fn parse_pdf(file_path: String, filter_options: PdfParsingFilters) -> Vec<Question> {
+pub fn parse_pdf(file_path: String, filter_options: ParsingFilters) -> Vec<Question> {
     let text = extract_pdf(&file_path).expect("Could not read pdf.");
 
     let filtered_text = text.split("\n\n")
