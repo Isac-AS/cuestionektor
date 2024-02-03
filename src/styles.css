@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.btn-primary {
+    @apply flex bg-wm-primary dark:bg-primary text-wm-OnPrimary dark:text-OnPrimary rounded shadow-md p-1 hover:brightness-110 items-center disabled:bg-wm-primary/20 dark:disabled:bg-primary/20 disabled:cursor-not-allowed;
+}
+
+.btn-secondary {
+    @apply flex bg-wm-secondary dark:bg-secondary text-wm-OnSecondary dark:text-OnSecondary rounded shadow-md p-1 hover:brightness-110 items-center;
+}
+
+.btn-primary-variant {
+    @apply flex bg-wm-primary-variant dark:bg-primary-variant text-wm-OnPrimary rounded shadow-md p-1 hover:brightness-110 items-center;
+}
+
+.btn-secondary-variant {
+    @apply flex bg-wm-secondary-variant dark:bg-secondary text-wm-OnPrimary dark:text-OnSecondary rounded shadow-md p-1 hover:brightness-110 items-center;
+}
