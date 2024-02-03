@@ -22,7 +22,8 @@ export interface Questionnaire {
 export interface RegisteredQuestionnaire {
     name: String,
     file_path: String,
-    uploaded_file_path: String
+    uploaded_file_path: String,
+    last_opened: String
 }
 
 export interface RegisteredQuestionnaires {

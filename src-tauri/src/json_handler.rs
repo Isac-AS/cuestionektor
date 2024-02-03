@@ -4,7 +4,7 @@ use std::{
     fs::{self, OpenOptions},
     io::Write,
 };
-use log::{debug, error, info};
+use log::{ error, info};
 use crate::model::RegisteredQuestionnaires;
 
 /// Will write a serializable element into the provided file path

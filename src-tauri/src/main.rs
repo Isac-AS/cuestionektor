@@ -1,6 +1,8 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use log::{debug, LevelFilter};
+use std::fs;
+
+use log::{debug, error, info, LevelFilter};
 use model::{
     OperationResult, OperationResultStruct, PdfParsingFilters, Questionnaire,
     RegisteredQuestionnaire, RegisteredQuestionnaires,
@@ -95,6 +97,80 @@ fn get_registered_questionnaires() -> OperationResultStruct<RegisteredQuestionna
 }
 
 #[tauri::command]
+fn update_registered_questionnaires(
+    updated_questionnaires: Vec<RegisteredQuestionnaire>,
+) -> OperationResultStruct<String> {
+    // Read current registered questionnaire list
+    let mut registered_questionnaires = match json_handler::read_json::<RegisteredQuestionnaires>(
+        REGISTERED_QUESTIONNAIRES_FILE_PATH.to_string(),
+    ) {
+        Some(registered_questionnaire) => registered_questionnaire,
+        None => {
+            return OperationResultStruct::new(
+                OperationResult::Fail,
+                Some(String::from("Error reading questionnaires")),
+            )
+        }
+    };
+    println!("\n\nUpdated questionnaires:\n{:?}\n\nRegistered questionnaires:\n{:?}", updated_questionnaires, registered_questionnaires);
+    registered_questionnaires.questionnaires = updated_questionnaires;
+    println!("\nUpdated registered questionnaires:\n{:?}", registered_questionnaires);
+    match json_handler::write_to_json(
+        registered_questionnaires,
+        REGISTERED_QUESTIONNAIRES_FILE_PATH.to_string(),
+    ) {
+        Ok(()) => OperationResultStruct::new(OperationResult::Success, Some(String::from("Saved questionnaires successfully"))),
+        Err(err) => {
+            return OperationResultStruct::new(OperationResult::Fail, Some(err.to_string()))
+        }
+    }
+}
+
+#[tauri::command]
+fn delete_questionnaire(
+    updated_questionnaires: Vec<RegisteredQuestionnaire>,
+    file_path: &str
+) -> OperationResultStruct<String> {
+    // Read current registered questionnaire list
+    let mut registered_questionnaires = match json_handler::read_json::<RegisteredQuestionnaires>(
+        REGISTERED_QUESTIONNAIRES_FILE_PATH.to_string(),
+    ) {
+        Some(registered_questionnaire) => registered_questionnaire,
+        None => {
+            return OperationResultStruct::new(
+                OperationResult::Fail,
+                Some(String::from("Error reading questionnaires")),
+            )
+        }
+    };
+    registered_questionnaires.questionnaires = updated_questionnaires;
+    print!("{:?}", registered_questionnaires);
+
+    let _ = match json_handler::write_to_json(
+        registered_questionnaires,
+        REGISTERED_QUESTIONNAIRES_FILE_PATH.to_string(),
+    ) {
+        Ok(()) => info!("Saved questionnaire list successfully proceding to delete."),
+        Err(err) => {
+            return OperationResultStruct::new(OperationResult::Fail, Some(err.to_string()))
+        }
+    };
+
+    debug!("About to remove: {}", file_path);
+    match fs::remove_file(file_path) {
+        Ok(_) => {
+            debug!("File: '{}' deleted successfully!", file_path);
+            OperationResultStruct::new(OperationResult::Success, Some(String::from("Removed questionnaire successfully")))
+        },
+        Err(err) => {
+            error!("Could not delete questionnaire file: {}", err);
+            return OperationResultStruct::new(OperationResult::Fail, Some(err.to_string()))
+        }
+    }
+
+}
+
+#[tauri::command]
 fn read_questionnaire(file_path: &str) -> OperationResultStruct<Questionnaire> {
     match json_handler::read_json(file_path.to_string()) {
         Some(questionnaire) => {
@@ -116,7 +192,7 @@ fn save_questionnaire(questionnaire: Questionnaire) -> OperationResultStruct<Str
 }
 
 fn main() {
-    let _ = simple_logging::log_to_file("cuestionektor.log", LevelFilter::Debug);
+    let _ = simple_logging::log_to_file("cuestionektor.log", LevelFilter::Trace);
     json_handler::check_json_dir(
         &QUESTIONNAIRE_DIRECTORY,
         &REGISTERED_QUESTIONNAIRES_FILE_PATH,
@@ -127,6 +203,8 @@ fn main() {
             greet,
             upload_pdf,
             get_registered_questionnaires,
+            update_registered_questionnaires,
+            delete_questionnaire,
             read_questionnaire,
             save_questionnaire
         ])

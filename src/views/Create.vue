@@ -10,7 +10,6 @@ const registered_questionnaires = ref<RegisteredQuestionnaire>();
 
 async function get_questionnaires() {
     registered_questionnaires.value = await invoke("get_registered_questionnaires");
-    console.log(registered_questionnaires)
 }
 
 onMounted(() => {
