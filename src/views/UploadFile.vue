@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { open } from "@tauri-apps/api/dialog";
-import { ref } from "vue";
+import { ref, inject } from "vue";
 import { parsePdf } from "../services/endpoints.service";
+import icons from '../assets/icons/'
+import { CreateNotification } from "../services/notifications.service";
+
+const createNotification = <CreateNotification>inject('create-notification');
 
 let uploaded_pdf_file: any = null;
 const pdf_file_name = ref('');
+const is_pdf_uploaded = ref(false);
 const pdf_tab = ref(true);
 
 async function handlePdfChange() {
@@ -16,7 +21,12 @@ async function handlePdfChange() {
             extensions: ['pdf']
         }]
     })
-    console.log(uploaded_pdf_file)
+    is_pdf_uploaded.value = true;
+    createNotification({
+        type: 'success',
+        message: 'Fichero subido correctamente',
+        duration: 3,
+    })
 }
 
 async function uploadPdf() {
@@ -99,13 +109,18 @@ async function handleTxtUpload() {
                     </li>
                 </ul>
                 <div class="flex flex-col gap-5 mt-7">
-                    <button @click="handlePdfChange" class="btn-primary flex justify-center">
-                        Abrir fichero
+                    <button @click="handlePdfChange"
+                        :class="`${is_pdf_uploaded ? 'btn-secondary' : 'btn-primary'}`"
+                        class="flex justify-center transition-all duration-200">
+                        <img :src="icons.file" class="mr-2 w-6">
+                        <p v-if="!is_pdf_uploaded">Abrir fichero</p>
+                        <p v-else>Abrir otro fichero</p>
                     </button>
                     <input type="text" placeholder="Nombre del cuestionario" v-model="pdf_file_name"
                         class="rounded shadow h-7 pl-5 text-OnPrimary focus:ring-3 focus:ring-sky-500">
                     <button @click="uploadPdf" class="btn-primary flex justify-center"
-                        :disabled="!uploaded_pdf_file || pdf_file_name.length <= 0">
+                        :disabled="!is_pdf_uploaded || pdf_file_name.length <= 0">
+                        <img :src="icons.settings" class="mr-2 w-6">
                         Procesar cuestionario
                     </button>
                 </div>
