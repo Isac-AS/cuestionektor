@@ -72,16 +72,16 @@ pub struct RegisteredQuestionnaire {
     pub name: String,
     pub file_path: String,
     pub uploaded_file_path: Option<String>,
-    pub was_opened: bool
+    pub last_opened: String
 }
 
 impl RegisteredQuestionnaire {
-    pub fn new(name: String, file_path: String, uploaded_file_path: Option<String>, was_opened: bool) -> RegisteredQuestionnaire {
+    pub fn new(name: String, file_path: String, uploaded_file_path: Option<String>) -> RegisteredQuestionnaire {
         RegisteredQuestionnaire {
             name,
             file_path,
             uploaded_file_path,
-            was_opened
+            last_opened: "0".to_string()
         }
     }
 }

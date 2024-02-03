@@ -23,7 +23,7 @@ provide("create-notification", createNotification);
 		</div>
 	</div>
 
-	<Toast v-for="(item, idx) in notifications" :key="item.id" :id="item.id" :type="item.type" :title="item.title"
+	<Toast v-for="(item) in notifications" :key="item.id" :id="item.id" :type="item.type" :title="item.title"
 		:message="item.message" :auto-close="item.autoClose" :duration="item.duration" @close="() => {
 			removeNotifications(item.id);
 		}"></Toast>

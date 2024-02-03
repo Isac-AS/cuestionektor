@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import logoURL from '../assets/logo.png';
 import icons from '../assets/icons';
+import { useRoute } from 'vue-router';
 </script>
 
 <template>
@@ -9,7 +10,7 @@ import icons from '../assets/icons';
             <router-link to="/">
                 <img :src="logoURL" class="h-14 lg:h-16 ml-1" alt="Cuestionektor logo" />
             </router-link>
-            <h1 class="text-2xl ml-7 font-semibold text-wm-OnSurface dark:text-OnSurface">{{ this.$route.name }}</h1>
+            <h1 class="text-2xl ml-7 font-semibold text-wm-OnSurface dark:text-OnSurface">{{ useRoute().name }}</h1>
         </div>
         <div class="flex">
             <router-link to="/" class="mx-2 dark:hover:bg-slate-500/65 rounded-md p-1">

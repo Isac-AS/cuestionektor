@@ -4,12 +4,25 @@ import { ref, inject } from "vue";
 import { parsePdf } from "../services/endpoints.service";
 import icons from '../assets/icons/'
 import { CreateNotification } from "../services/notifications.service";
+import { OperationResult } from "../models";
 
 const createNotification = <CreateNotification>inject('create-notification');
+
+function informAboutResult(result: OperationResult, sucess_message: string, error_message: string): boolean {
+    let returnValue = result == OperationResult.Success;
+    createNotification({
+        type: returnValue ? 'success' : 'error',
+        title: returnValue ? 'Exito: ' : 'Error: ',
+        message: returnValue ? sucess_message : error_message,
+        duration: 3
+    });
+    return returnValue;
+}
 
 let uploaded_pdf_file: any = null;
 const pdf_file_name = ref('');
 const is_pdf_uploaded = ref(false);
+const is_processing_pdf = ref(false);
 const pdf_tab = ref(true);
 
 async function handlePdfChange() {
@@ -21,30 +34,55 @@ async function handlePdfChange() {
             extensions: ['pdf']
         }]
     })
-    is_pdf_uploaded.value = true;
-    createNotification({
-        type: 'success',
-        message: 'Fichero subido correctamente',
-        duration: 3,
-    })
+
+    if (uploaded_pdf_file != null) {
+        is_pdf_uploaded.value = true;
+        createNotification({
+            type: 'success',
+            message: 'Fichero subido correctamente',
+            duration: 3,
+        })
+    }
 }
 
 async function uploadPdf() {
     if (!uploaded_pdf_file) {
-        alert("Sube un pdf primero");
+        createNotification({
+            type: 'error',
+            message: 'Sube un pdf primero',
+            duration: 3,
+        });
         return;
     }
     if (pdf_file_name.value.length <= 0) {
-        alert("Dale un nombre al cuestionario");
+        createNotification({
+            type: 'error',
+            message: 'Dale un nombre al cuestionario',
+            duration: 3,
+        });
         return;
     }
 
-    let result: boolean = await parsePdf(uploaded_pdf_file, pdf_file_name.value);
-    console.log(result)
+    parsePdf(uploaded_pdf_file, pdf_file_name.value).then(
+        (uploadResult) => {
+            informAboutResult(
+                uploadResult.result,
+                "Documento procesado correctamente.",
+                "Error al procesar el pdf.",
+            );
+            pdf_file_name.value = '';
+            uploaded_pdf_file = null;
+            is_processing_pdf.value = false;
+        }
+    );
 }
 
 async function handleTxtUpload() {
-    alert("Todavia no implementado.")
+    createNotification({
+        type: 'error',
+        message: 'Todavia no implementado',
+        duration: 3,
+    });
 }
 </script>
 
@@ -108,9 +146,8 @@ async function handleTxtUpload() {
                         </ul>
                     </li>
                 </ul>
-                <div class="flex flex-col gap-5 mt-7">
-                    <button @click="handlePdfChange"
-                        :class="`${is_pdf_uploaded ? 'btn-secondary' : 'btn-primary'}`"
+                <div class="flex flex-col gap-5 mt-7" v-if="!is_processing_pdf">
+                    <button @click="handlePdfChange" :class="`${is_pdf_uploaded ? 'btn-secondary' : 'btn-primary'}`"
                         class="flex justify-center transition-all duration-200">
                         <img :src="icons.file" class="mr-2 w-6">
                         <p v-if="!is_pdf_uploaded">Abrir fichero</p>
@@ -118,11 +155,15 @@ async function handleTxtUpload() {
                     </button>
                     <input type="text" placeholder="Nombre del cuestionario" v-model="pdf_file_name"
                         class="rounded shadow h-7 pl-5 text-OnPrimary focus:ring-3 focus:ring-sky-500">
-                    <button @click="uploadPdf" class="btn-primary flex justify-center"
-                        :disabled="!is_pdf_uploaded || pdf_file_name.length <= 0">
+                    <button @click="is_processing_pdf = true" @click.prevent="uploadPdf"
+                        class="btn-primary flex justify-center" :disabled="!is_pdf_uploaded || pdf_file_name.length <= 0">
                         <img :src="icons.settings" class="mr-2 w-6">
                         Procesar cuestionario
                     </button>
+                </div>
+                <div v-else class="flex p-3 rounded shadow-lg bg-surface-dp24 my-6">
+                    <img :src="icons.settings" class="mr-2 w-6 animate-spin invert">
+                    <h1 class="text-2xl font-semibold">Procesando...</h1>
                 </div>
             </div>
         </Transition>

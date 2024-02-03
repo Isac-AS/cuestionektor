@@ -1,4 +1,6 @@
 use std::error::Error;
+use log::info;
+
 use crate::model::{Answer, Question, PdfParsingFilters};
 
 fn extract_pdf(file_path: &String) -> Result<String, Box<dyn Error>> {
@@ -38,7 +40,7 @@ pub fn parse_pdf(file_path: String, filter_options: PdfParsingFilters) -> Vec<Qu
             if let Ok(number) = numeric_part.parse::<u32>() {
                 placeholder_question.question_number = number;
             } else {
-                println!("No valid u32 number found at the beginning of the string.");
+                info!("No valid u32 number found at the beginning of the string.");
             }
         }
 

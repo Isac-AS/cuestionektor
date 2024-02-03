@@ -30,8 +30,8 @@ export interface RegisteredQuestionnaires {
 }
 
 export enum OperationResult {
-    Success,
-    Fail
+    Success = 'Success',
+    Fail = 'Fail'
 }
 
 export interface OperationResultStruct<T> {
