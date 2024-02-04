@@ -8,7 +8,7 @@ use crate::models::{
 
 #[tauri::command]
 pub fn get_questions(
-    questionnaire_id: u64,
+    questionnaire_id: i32,
     db: tauri::State<Database>,
 ) -> BackendResponse<Vec<Question>> {
     let r = match db.r_transaction() {

@@ -8,7 +8,7 @@ use crate::models::{
 
 #[tauri::command]
 pub fn update_question(
-    id: u64,
+    id: i32,
     question_to_update: Question,
     db: tauri::State<Database>,
 ) -> BackendResponse<String> {

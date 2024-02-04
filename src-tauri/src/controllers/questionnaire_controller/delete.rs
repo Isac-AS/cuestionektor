@@ -10,7 +10,7 @@ use crate::{
 };
 
 #[tauri::command]
-pub fn delete_questionnaire(id: u64, db: tauri::State<Database>) -> BackendResponse<String> {
+pub fn delete_questionnaire(id: i32, db: tauri::State<Database>) -> BackendResponse<String> {
     let rw = match db.rw_transaction() {
         Ok(rw_t) => rw_t,
         Err(err) => {

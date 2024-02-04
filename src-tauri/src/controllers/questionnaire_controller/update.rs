@@ -8,7 +8,7 @@ use crate::models::{
 
 #[tauri::command]
 pub fn update_questionnaire_name(
-    id: u64,
+    id: i32,
     new_name: &str,
     db: tauri::State<Database>,
 ) -> BackendResponse<String> {
@@ -55,7 +55,7 @@ pub fn update_questionnaire_name(
 }
 
 #[tauri::command]
-pub fn touch_questionnaire(id: u64, db: tauri::State<Database>) -> BackendResponse<String> {
+pub fn touch_questionnaire(id: i32, db: tauri::State<Database>) -> BackendResponse<String> {
     let rw = match db.rw_transaction() {
         Ok(rw_t) => rw_t,
         Err(err) => {

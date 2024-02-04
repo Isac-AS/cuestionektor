@@ -27,7 +27,7 @@ pub fn get_questionnaires(db: tauri::State<Database>) -> BackendResponse<Vec<Que
 }
 
 #[tauri::command]
-pub fn get_questionnaire(id: u64, db: tauri::State<Database>) -> BackendResponse<Questionnaire> {
+pub fn get_questionnaire(id: i32, db: tauri::State<Database>) -> BackendResponse<Questionnaire> {
     let r = match db.r_transaction() {
         Ok(read_transaction) => read_transaction,
         Err(err) => {

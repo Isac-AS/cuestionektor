@@ -25,8 +25,8 @@ impl Answer {
 #[native_db]
 pub struct Question {
     #[primary_key]
-    pub id: u64,
-    pub questionnaire_id: u64,
+    pub id: i32,
+    pub questionnaire_id: i32,
     pub question_number: u32,
     pub heading: String,
     pub answers: Vec<Answer>,
@@ -35,7 +35,7 @@ pub struct Question {
 }
 
 impl Question {
-    pub fn new_from(questionnaire_id: u64, question: &Question) -> Question {
+    pub fn new_from(questionnaire_id: i32, question: &Question) -> Question {
         Question {
             id: rand::random(),
             questionnaire_id,
@@ -47,7 +47,7 @@ impl Question {
         }
     }
 
-    pub fn new_empty(questionnaire_id: u64) -> Question {
+    pub fn new_empty(questionnaire_id: i32) -> Question {
         Question {
             id: rand::random(),
             questionnaire_id,
@@ -65,7 +65,7 @@ impl Question {
 #[native_db]
 pub struct Questionnaire {
     #[primary_key]
-    pub id: u64,
+    pub id: i32,
     pub name: String,
     pub last_accessed: String,
 }

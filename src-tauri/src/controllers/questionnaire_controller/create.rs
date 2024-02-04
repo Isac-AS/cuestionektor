@@ -16,7 +16,7 @@ pub fn upload_pdf(
     name: &str,
     db: tauri::State<Database>,
 ) -> BackendResponse<String> {
-    let questionnaire_id: u64 = rand::random();
+    let questionnaire_id: i32 = rand::random();
     // Extract questions from pdf
     let questions = pdf_parser::parse_pdf(
         uploaded_file_path.to_string(),

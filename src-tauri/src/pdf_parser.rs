@@ -11,7 +11,7 @@ fn extract_pdf(file_path: &String) -> Result<String, Box<dyn Error>> {
     Ok(pdf_extract::extract_text_from_mem(&bytes).unwrap())
 }
 
-pub fn parse_pdf(file_path: String, filter_options: ParsingFilters, questionnaire_id: u64) -> Vec<Question> {
+pub fn parse_pdf(file_path: String, filter_options: ParsingFilters, questionnaire_id: i32) -> Vec<Question> {
     let text = extract_pdf(&file_path).expect("Could not read pdf.");
 
     let filtered_text = text.split("\n\n").filter(|line| {
