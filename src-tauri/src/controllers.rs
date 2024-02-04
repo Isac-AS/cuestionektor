@@ -1,2 +1,2 @@
 pub mod questionnaire_controller;
-pub mod registered_controller;
+pub mod question_controller;

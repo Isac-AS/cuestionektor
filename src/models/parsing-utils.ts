@@ -1,6 +1,6 @@
 
 export interface ParsingFilters {
-    heading_re: String,
-    possible_answer_re: String,
-    answer_re: String
+    heading_re: string,
+    possible_answer_re: string,
+    answer_re: string
 }

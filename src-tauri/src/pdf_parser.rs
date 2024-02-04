@@ -1,39 +1,38 @@
-use std::error::Error;
 use log::info;
+use std::error::Error;
 
-use crate::models::{parsing_utils::ParsingFilters, questionnaire::{Answer, Question}};
-
-
+use crate::models::{
+    parsing_utils::ParsingFilters,
+    questionnaire::{Answer, Question},
+};
 
 fn extract_pdf(file_path: &String) -> Result<String, Box<dyn Error>> {
     let bytes = std::fs::read(file_path)?;
     Ok(pdf_extract::extract_text_from_mem(&bytes).unwrap())
 }
 
-pub fn parse_pdf(file_path: String, filter_options: ParsingFilters) -> Vec<Question> {
+pub fn parse_pdf(file_path: String, filter_options: ParsingFilters, questionnaire_id: u64) -> Vec<Question> {
     let text = extract_pdf(&file_path).expect("Could not read pdf.");
 
-    let filtered_text = text.split("\n\n")
-        .filter(|line| 
-            filter_options.heading_re.is_match(&line) ||
-            filter_options.possible_answer_re.is_match(&line) ||
-            filter_options.answer_re.is_match(&line)
-        );
+    let filtered_text = text.split("\n\n").filter(|line| {
+        filter_options.heading_re.is_match(&line)
+            || filter_options.possible_answer_re.is_match(&line)
+            || filter_options.answer_re.is_match(&line)
+    });
 
     let mut questions: Vec<Question> = Vec::new();
-    let mut placeholder_question = Question::new_empty();
+    let mut placeholder_question = Question::new_empty(questionnaire_id);
     let prefixes = ["A) ", "B) ", "C) ", "D) "];
     filtered_text.for_each(|line| {
-
         // Removal and sanitation of line
-        let lines: Vec<String> = line.split('\n').map(|v|String::from(v)).collect();
-        let lines_without_last: Vec<String> = if lines.len() > 1 && line.contains("Página"){
+        let lines: Vec<String> = line.split('\n').map(|v| String::from(v)).collect();
+        let lines_without_last: Vec<String> = if lines.len() > 1 && line.contains("Página") {
             lines[..lines.len() - 1].to_vec()
         } else {
             lines.to_vec()
         };
         let line = lines_without_last.join(" ");
-        
+
         // Extraction of heading and question number
         if filter_options.heading_re.is_match(line.as_str()) {
             placeholder_question.heading = line.to_string();
@@ -49,28 +48,28 @@ pub fn parse_pdf(file_path: String, filter_options: ParsingFilters) -> Vec<Quest
         // Extraction of possible answer
         if filter_options.possible_answer_re.is_match(line.as_str()) {
             // Find the first matching prefix
-            let stripped_line: Option<&str> = prefixes.iter().find_map(|&prefix| {
-                line.strip_prefix(prefix).map(|rest| rest.trim())
-            });
-        
-            placeholder_question.answers.push(
-                Answer::new(
-                    line.chars().next().unwrap().to_string(),
-                    stripped_line.unwrap().to_string(),
-                    false));
+            let stripped_line: Option<&str> = prefixes
+                .iter()
+                .find_map(|&prefix| line.strip_prefix(prefix).map(|rest| rest.trim()));
+
+            placeholder_question.answers.push(Answer::new(
+                line.chars().next().unwrap().to_string(),
+                stripped_line.unwrap().to_string(),
+                false,
+            ));
         }
 
         // Modification of answer and push into result
         if filter_options.answer_re.is_match(line.as_str()) {
-            let correct_answer = line.chars().nth(line.len()-1).unwrap().to_string();
+            let correct_answer = line.chars().nth(line.len() - 1).unwrap().to_string();
             placeholder_question.answers.iter_mut().for_each(|answer| {
                 if answer.prefix == correct_answer {
                     answer.is_correct = true;
                 }
             });
-            
+
             questions.push(placeholder_question.clone());
-            placeholder_question = Question::new_empty();
+            placeholder_question = Question::new_empty(questionnaire_id);
         }
     });
     questions

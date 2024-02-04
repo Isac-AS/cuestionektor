@@ -1,18 +1,21 @@
 export interface Answer {
-    prefix: String,
-    text: String,
+    prefix: string,
+    text: string,
     is_correct: boolean
 }
 
 export interface Question {
+    id: number,
+    questionnaire_id: number,
     question_number: number,
-    heading: String,
+    heading: string,
     answers: Answer[],
-    topic: String,
-    explanation: String
+    topic: string,
+    explanation: string,
 }
 
 export interface Questionnaire {
-    questions: Question[],
-    name: String,
+    id: number,
+    name: string,
+    last_accessed: string,
 }

@@ -1,32 +1,32 @@
 <script setup lang="ts">
 import { open } from "@tauri-apps/api/dialog";
 import { ref, inject } from "vue";
-import { parsePdf } from "../services/endpoints.service";
 import icons from '../assets/icons/'
 import { CreateNotification } from "../services/notifications.service";
-import { OperationResult } from "../models";
+import { OperationResult } from "../models/view-models";
+import { parsePdf } from "../services/questionnaire.service";
 
 const createNotification = <CreateNotification>inject('create-notification');
 
-function informAboutResult(result: OperationResult, sucess_message: string, error_message: string): boolean {
+function informAboutResult(result: OperationResult, successMessage: string, errorMessage: string): boolean {
     let returnValue = result == OperationResult.Success;
     createNotification({
         type: returnValue ? 'success' : 'error',
         title: returnValue ? 'Exito: ' : 'Error: ',
-        message: returnValue ? sucess_message : error_message,
+        message: returnValue ? successMessage : errorMessage,
         duration: 3
     });
     return returnValue;
 }
 
-let uploaded_pdf_file: any = null;
-const pdf_file_name = ref('');
-const is_pdf_uploaded = ref(false);
-const is_processing_pdf = ref(false);
-const pdf_tab = ref(true);
+let uploadedPdfFile: any = null;
+const pdfFileName = ref('');
+const isPdfUploaded = ref(false);
+const isProcessingPdf = ref(false);
+const pdfTab = ref(true);
 
 async function handlePdfChange() {
-    uploaded_pdf_file = await open({
+    uploadedPdfFile = await open({
         multiple: false,
         title: "Selecciona el pdf",
         filters: [{
@@ -35,8 +35,8 @@ async function handlePdfChange() {
         }]
     })
 
-    if (uploaded_pdf_file != null) {
-        is_pdf_uploaded.value = true;
+    if (uploadedPdfFile != null) {
+        isPdfUploaded.value = true;
         createNotification({
             type: 'success',
             message: 'Fichero subido correctamente',
@@ -46,7 +46,7 @@ async function handlePdfChange() {
 }
 
 async function uploadPdf() {
-    if (!uploaded_pdf_file) {
+    if (!uploadedPdfFile) {
         createNotification({
             type: 'error',
             message: 'Sube un pdf primero',
@@ -54,7 +54,7 @@ async function uploadPdf() {
         });
         return;
     }
-    if (pdf_file_name.value.length <= 0) {
+    if (pdfFileName.value.length <= 0) {
         createNotification({
             type: 'error',
             message: 'Dale un nombre al cuestionario',
@@ -63,16 +63,16 @@ async function uploadPdf() {
         return;
     }
 
-    parsePdf(uploaded_pdf_file, pdf_file_name.value).then(
+    parsePdf(uploadedPdfFile, pdfFileName.value).then(
         (uploadResult) => {
             informAboutResult(
                 uploadResult.result,
                 "Documento procesado correctamente.",
                 "Error al procesar el pdf.",
             );
-            pdf_file_name.value = '';
-            uploaded_pdf_file = null;
-            is_processing_pdf.value = false;
+            pdfFileName.value = '';
+            uploadedPdfFile = null;
+            isProcessingPdf.value = false;
         }
     );
 }
@@ -89,11 +89,11 @@ async function handleTxtUpload() {
 <template>
     <div class="flex flex-col mt-7 items-center w-full">
         <div class="flex w-2/5">
-            <button @click="pdf_tab = true" :class="`${pdf_tab ? 'bg-wm-primary/80 dark:bg-primary/80' : ''}`"
+            <button @click="pdfTab = true" :class="`${pdfTab ? 'bg-wm-primary/80 dark:bg-primary/80' : ''}`"
                 class="w-1/2 flex justify-center mx-1 p-2 bg-wm-primary/30 dark:bg-primary/30 rounded hover:brightness-110 transition-all duration-300">
                 <p class="font-semibold">Subir un pdf</p>
             </button>
-            <button @click="pdf_tab = false" :class="`${!pdf_tab ? 'bg-wm-primary/80 dark:bg-primary/80' : ''}`"
+            <button @click="pdfTab = false" :class="`${!pdfTab ? 'bg-wm-primary/80 dark:bg-primary/80' : ''}`"
                 class="w-1/2 flex justify-center mx-1 p-2 bg-wm-primary/30 dark:bg-primary/30 rounded hover:brightness-110 transition-all duration-300">
                 <p class="font-semibold">Subir un fichero de texto</p>
             </button>
@@ -101,7 +101,7 @@ async function handleTxtUpload() {
         <hr class="h-px mt-2 mb-6 bg-gray-500 border-0 w-2/5">
         <Transition enter-from-class="-translate-x-[150%] opacity-0" leave-to-class="-translate-x-[150%] opacity-0"
             enter-active-class="transition duration-1000" leave-active-class="transition duration-200">
-            <div v-if="pdf_tab" class="flex flex-col dark:bg-surface-dp6 rounded shadow-md items-center p-4 gap-5 w-1/2">
+            <div v-if="pdfTab" class="flex flex-col dark:bg-surface-dp6 rounded shadow-md items-center p-4 gap-5 w-1/2">
                 <h3 class="text-2xl mt-5 font-semibold">Subir un pdf</h3>
                 <p class="w-4/5">
                     Funciona <b>solo</b> para cuestionarios similares a los que aparecen en el siguiente enlace:
@@ -146,17 +146,17 @@ async function handleTxtUpload() {
                         </ul>
                     </li>
                 </ul>
-                <div class="flex flex-col gap-5 mt-7" v-if="!is_processing_pdf">
-                    <button @click="handlePdfChange" :class="`${is_pdf_uploaded ? 'btn-secondary' : 'btn-primary'}`"
+                <div class="flex flex-col gap-5 mt-7" v-if="!isProcessingPdf">
+                    <button @click="handlePdfChange" :class="`${isPdfUploaded ? 'btn-secondary' : 'btn-primary'}`"
                         class="flex justify-center transition-all duration-200">
                         <img :src="icons.file" class="mr-2 w-6">
-                        <p v-if="!is_pdf_uploaded">Abrir fichero</p>
+                        <p v-if="!isPdfUploaded">Abrir fichero</p>
                         <p v-else>Abrir otro fichero</p>
                     </button>
-                    <input type="text" placeholder="Nombre del cuestionario" v-model="pdf_file_name"
+                    <input type="text" placeholder="Nombre del cuestionario" v-model="pdfFileName"
                         class="rounded shadow h-7 pl-5 text-OnPrimary focus:ring-3 focus:ring-sky-500">
-                    <button @click="is_processing_pdf = true" @click.prevent="uploadPdf"
-                        class="btn-primary flex justify-center" :disabled="!is_pdf_uploaded || pdf_file_name.length <= 0">
+                    <button @click="isProcessingPdf = true" @click.prevent="uploadPdf"
+                        class="btn-primary flex justify-center" :disabled="!isPdfUploaded || pdfFileName.length <= 0">
                         <img :src="icons.settings" class="mr-2 w-6">
                         Procesar cuestionario
                     </button>
@@ -169,7 +169,7 @@ async function handleTxtUpload() {
         </Transition>
         <Transition enter-from-class="translate-y-[150%] opacity-0" leave-to-class="translate-y-[150%] opacity-0"
             enter-active-class="transition duration-1000" leave-active-class="transition duration-200">
-            <div v-if="!pdf_tab" class="flex flex-col dark:bg-surface-dp6 rounded shadow-md items-center p-4 gap-5 w-1/2">
+            <div v-if="!pdfTab" class="flex flex-col dark:bg-surface-dp6 rounded shadow-md items-center p-4 gap-5 w-1/2">
                 <h3 class="text-2xl mt-5 font-semibold">Subir un fichero de texto</h3>
                 <p>Convierte el pdf u otro tipo de fichero a texto por internet.</p>
                 <p>Por defecto se procesa de la misma manera que el pdf.</p>
@@ -179,10 +179,10 @@ async function handleTxtUpload() {
                     <button @click="handlePdfChange" class="btn-primary flex justify-center">
                         Abrir fichero
                     </button>
-                    <input type="text" placeholder="Nombre del cuestionario" v-model="pdf_file_name"
+                    <input type="text" placeholder="Nombre del cuestionario" v-model="pdfFileName"
                         class="rounded shadow h-7 pl-5 text-OnPrimary focus:ring-3 focus:ring-sky-500">
                     <button @click="handleTxtUpload" class="btn-primary flex justify-center"
-                        :disabled="!uploaded_pdf_file || pdf_file_name.length <= 0">
+                        :disabled="!uploadedPdfFile || pdfFileName.length <= 0">
                         Procesar cuestionario
                     </button>
                 </div>

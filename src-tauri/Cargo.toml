@@ -21,6 +21,10 @@ tauri-plugin-persisted-scope = { git = "https://github.com/tauri-apps/plugins-wo
 simple-logging = "2.0.2"
 log = "0.4.20"
 native_db = "0.5.3"
+once_cell = "1.19.0"
+native_model = "0.4.11"
+rand = "0.8.5"
+chrono = "0.4.33"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem
