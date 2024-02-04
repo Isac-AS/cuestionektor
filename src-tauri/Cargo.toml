@@ -1,8 +1,8 @@
 [package]
 name = "cuestionektor"
-version = "0.0.0"
-description = "A Tauri App"
-authors = ["you"]
+version = "0.6.9"
+description = "Questionnaire app"
+authors = ["Isac"]
 license = ""
 repository = ""
 edition = "2021"
