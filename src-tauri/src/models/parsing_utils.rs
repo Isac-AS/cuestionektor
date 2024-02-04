@@ -15,12 +15,11 @@ impl ParsingFilters {
             answer_re: Regex::new(r"^Respuesta Correcta").unwrap()
         }
     }
-    
-    pub fn new_with_strings(heading_re: String, possible_answer_re: String, answer_re: String) -> ParsingFilters{
-        ParsingFilters {
-            heading_re: Regex::new(format!(r#"{}"#, regex::escape(&heading_re)).as_str()).unwrap(),
-            possible_answer_re: Regex::new(format!(r#"{}"#, regex::escape(&possible_answer_re)).as_str()).unwrap(),
-            answer_re: Regex::new(format!(r#"{}"#, regex::escape(&answer_re)).as_str()).unwrap()
-        }
-    }
+    // pub fn new_with_strings(heading_re: String, possible_answer_re: String, answer_re: String) -> ParsingFilters{
+    //     ParsingFilters {
+    //         heading_re: Regex::new(format!(r#"{}"#, regex::escape(&heading_re)).as_str()).unwrap(),
+    //         possible_answer_re: Regex::new(format!(r#"{}"#, regex::escape(&possible_answer_re)).as_str()).unwrap(),
+    //         answer_re: Regex::new(format!(r#"{}"#, regex::escape(&answer_re)).as_str()).unwrap()
+    //     }
+    // }
 }
