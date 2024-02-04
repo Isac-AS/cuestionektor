@@ -15,10 +15,13 @@ const {
 
 const {
 	registeredQuestionnaires,
-	loadQuestionnaires
+	loadQuestionnaires,
+	currentQuestionnaireId,
+	setCurrentQuestionnaireId
 } = useContext();
 
-export type InformAboutResult = {(
+export type InformAboutResult = {
+	(
 		result: OperationResult,
 		successMessage: string,
 		errorMessage: string
@@ -34,10 +37,15 @@ const informAboutResult: InformAboutResult = (result: OperationResult, successMe
 	});
 	return returnValue;
 }
-provide("registered-questionnaires", registeredQuestionnaires);
-provide("refresh-questionnaires", loadQuestionnaires);
+
 provide("inform-about-result", informAboutResult);
 provide("create-notification", createNotification);
+
+provide("registered-questionnaires", registeredQuestionnaires);
+provide("refresh-questionnaires", loadQuestionnaires);
+provide("current-questionnaire-id", currentQuestionnaireId);
+provide("set-current-questionnaire-id", setCurrentQuestionnaireId);
+
 onMounted(() => {
 	loadQuestionnaires()
 })
