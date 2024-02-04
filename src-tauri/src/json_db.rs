@@ -31,6 +31,7 @@ impl JsonDB {
         Ok(JsonDB { path: db_path })
     }
 
+
     pub fn init_collections(self) -> Result<(), Box<dyn std::error::Error>> {
         if !Path::new(&*format!("{}/questionnaires/", &self.path)).is_dir() {
             fs::create_dir_all(format!("{}/questionnaires/", &self.path))?;
@@ -55,7 +56,25 @@ impl JsonDB {
     where
         S: Into<String>,
     {
-        fs::create_dir(format!("{}/{}", self.path, collection_path.into()))?;
+        let collection_path_as_str = collection_path.into();
+        if !Path::new(&*format!("{}/{}", self.path, collection_path_as_str.clone())).is_dir() {
+            fs::create_dir(format!("{}/{}", self.path, collection_path_as_str))?;
+        }
+        Ok(self)
+    }
+
+
+    pub fn delete_collection<S>(
+        self,
+        collection_path: S,
+    ) -> Result<JsonDB, Box<dyn std::error::Error>>
+    where
+        S: Into<String>,
+    {
+        let collection_path_as_str = collection_path.into();
+        if Path::new(&*format!("{}/{}", self.path, collection_path_as_str.clone())).is_dir() {
+            fs::remove_dir_all(format!("{}/{}", self.path, collection_path_as_str))?;
+        }
         Ok(self)
     }
 

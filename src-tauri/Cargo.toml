@@ -20,6 +20,7 @@ pdf-extract = "0.7.4"
 tauri-plugin-persisted-scope = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 simple-logging = "2.0.2"
 log = "0.4.20"
+native_db = "0.5.3"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem

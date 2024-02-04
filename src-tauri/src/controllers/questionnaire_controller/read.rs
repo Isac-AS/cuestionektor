@@ -6,17 +6,18 @@ use crate::{
         questionnaire::Questionnaire,
         view_models::{BackendResponse, OperationResult},
     },
+    QUESTIONNAIRE_COLLECTION,
 };
 
 #[tauri::command]
-fn read_questionnaire(name: &str) -> BackendResponse<Questionnaire> {
+pub fn read_questionnaire(document_name: &str) -> BackendResponse<Questionnaire> {
     let db = JsonDB::init("db").unwrap();
-    match db.read("questionnaires", name) {
+    match db.read(QUESTIONNAIRE_COLLECTION, document_name) {
         Ok(questionnaire) => BackendResponse::new(OperationResult::Success, questionnaire),
         Err(err) => {
             error!(
                 "Could not read questionnaire with name: '{}'\nError: '{}'",
-                name, err
+                document_name, err
             );
             BackendResponse::new(
                 OperationResult::Fail,

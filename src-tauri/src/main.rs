@@ -11,6 +11,10 @@ mod pdf_parser;
 use controllers::registered_controller::create::upload_pdf;
 use json_db::JsonDB;
 
+const REGISTERED_COLLECTION: &str = "registered";
+const REGISTERED_DOCUMENT: &str = "registered";
+const QUESTIONNAIRE_COLLECTION: &str = "questionnaires";
+
 fn main() {
     let _ = simple_logging::log_to_file("cuestionektor.log", LevelFilter::Trace);
     
