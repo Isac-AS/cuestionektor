@@ -1,41 +1,13 @@
 <script setup lang="ts">
-import { inject, onMounted, ref } from "vue";
-
-// import icons from '../assets/icons/'
+import { computed, inject } from "vue";
 import NoQuestionnaires from "../components/NoQuestionnaires.vue"
-import { CreateNotification } from "../services/notifications.service";
-import { BackendResponse, OperationResult } from "../models/view-models";
 import { Questionnaire } from "../models/questionnaire";
-import { getQuestionnaires } from "../services/questionnaire.service";
+// import icons from '../assets/icons/'
 
-const createNotification = <CreateNotification>inject('create-notification');
-const registeredQuestionnaires = ref<Questionnaire[]>();
-const noRegisteredQuestionnaires = ref<boolean>(false);
-
-function handleResponse(response: BackendResponse<Questionnaire[]>) {
-    if (response.result == OperationResult.Fail) {
-        createNotification({
-            type: 'Error',
-            message: 'No se pudieron leer los cuestionarios',
-            title: 'Error',
-            duration: 3,
-        })
-        return;
-    }
-}
-
-async function loadQuestionnaires() {
-    let questionnaireResponse = await getQuestionnaires();
-    handleResponse(questionnaireResponse);
-    registeredQuestionnaires.value = questionnaireResponse.data;
-    if (registeredQuestionnaires.value.length <= 0) {
-        noRegisteredQuestionnaires.value = true;
-    }
-}
-
-onMounted(() => {
-    loadQuestionnaires()
-})
+const registeredQuestionnaires = inject<Questionnaire[]>('registered-questionnaires');
+const noRegisteredQuestionnaires = computed(() => {
+    return registeredQuestionnaires!.length > 0;
+});
 </script>
 
 <template>

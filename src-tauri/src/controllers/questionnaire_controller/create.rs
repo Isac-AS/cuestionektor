@@ -10,7 +10,7 @@ use crate::{
     pdf_parser,
 };
 
-#[tauri::command]
+#[tauri::command(async)]
 pub fn upload_pdf(
     uploaded_file_path: &str,
     name: &str,

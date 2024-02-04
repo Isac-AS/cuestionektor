@@ -1,58 +1,34 @@
 <script setup lang="ts">
-import { inject, onMounted, ref } from "vue";
 import icons from '../assets/icons/'
+import { computed, inject, onMounted, ref } from "vue";
 import { Questionnaire } from "../models/questionnaire";
-import { BackendResponse, OperationResult } from "../models/view-models";
 import NoQuestionnaires from "../components/NoQuestionnaires.vue"
-import { CreateNotification } from "../services/notifications.service";
-import { updateQuestionnaireName, deleteQuestionnaire, getQuestionnaires } from "../services/questionnaire.service"
+import { updateQuestionnaireName, deleteQuestionnaire } from "../services/questionnaire.service"
+import { InformAboutResult } from '../App.vue';
+import { LoadQuestionnaires } from '../services/context.service';
 
-const createNotification = <CreateNotification>inject('create-notification');
-const registeredQuestionnaires = ref<Questionnaire[]>();
-const noRegisteredQuestionnaires = ref<boolean>(false);
+// Injections
+const registeredQuestionnaires = inject<Questionnaire[]>('registered-questionnaires');
+const noRegisteredQuestionnaires = computed(() => {
+    return registeredQuestionnaires!.length > 0;
+});
+const informAboutResult = inject<InformAboutResult>('inform-about-result');
+const loadQuestionnaires = inject<LoadQuestionnaires>("refresh-questionnaires");
+
+// Scoped variables
 const editing_name = ref<boolean>(false);
 const newName = ref('');
 const editIndex = ref(-1);
 
-function informAboutResult(result: OperationResult, successMessage: string, errorMessage: string): boolean {
-    let returnValue = result == OperationResult.Success;
-    createNotification({
-        type: returnValue ? 'success' : 'error',
-        title: returnValue ? 'Exito: ' : 'Error: ',
-        message: returnValue ? successMessage : errorMessage,
-        duration: 3
-    });
-    return returnValue;
-}
-function handleResponse(response: BackendResponse<Questionnaire[]>) {
-    if (response.result == OperationResult.Fail) {
-        createNotification({
-            type: 'Error',
-            message: 'No se pudieron leer los cuestionarios',
-            title: 'Error',
-            duration: 3,
-        })
-        return;
-    }
-}
-
-async function loadQuestionnaires() {
-    let questionnaireResponse = await getQuestionnaires();
-    handleResponse(questionnaireResponse);
-    registeredQuestionnaires.value = questionnaireResponse.data;
-    if (registeredQuestionnaires.value.length <= 0) {
-        noRegisteredQuestionnaires.value = true;
-    }
-}
-
 async function changeName(id: number) {
     await updateQuestionnaireName(id, newName.value).then(
         (modificationResult) => {
-            informAboutResult(
+            informAboutResult!(
                 modificationResult.result,
                 "Nombre modificado con exito.",
                 "Error al cambiar el nombre.",
             );
+            loadQuestionnaires!();
             editing_name.value = false;
             editIndex.value = -1;
         }
@@ -62,17 +38,18 @@ async function changeName(id: number) {
 async function deleteQuestionnaireCompletely(id: number) {
     await deleteQuestionnaire(id).then(
         (modificationResult) => {
-            informAboutResult(
+            informAboutResult!(
                 modificationResult.result,
                 "Cuestionario eliminado con exito.",
                 "Error al eliminar el cuestionario.",
             );
+            loadQuestionnaires!();
         }
     );
 }
 
 onMounted(() => {
-    loadQuestionnaires();
+    loadQuestionnaires!();
 })
 </script>
 
@@ -124,7 +101,7 @@ onMounted(() => {
                         </div>
                     </div>
                     <div class="col-span-2">
-                        Abierto por ultima vez
+                        Abierto || Modificado
                     </div>
                     <div class="col-span-3 bg-surface-dp24 p-1 rounded shadow-md">
                         <div class="ml-2">

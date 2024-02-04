@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { provide } from 'vue';
+import { onMounted, provide } from 'vue';
 import AppBar from './components/AppBar.vue'
 import Sidebar from './components/Sidebar.vue'
 import Toast from './components/Toast.vue';
 import useNotifications from './services/notifications.service';
+import { OperationResult } from './models/view-models';
+import useContext from './services/context.service';
 
 const {
 	notifications,
@@ -11,7 +13,34 @@ const {
 	removeNotifications,
 } = useNotifications();
 
+const {
+	registeredQuestionnaires,
+	loadQuestionnaires
+} = useContext();
+
+export type InformAboutResult = {(
+		result: OperationResult,
+		successMessage: string,
+		errorMessage: string
+	): boolean;
+}
+const informAboutResult: InformAboutResult = (result: OperationResult, successMessage: string, errorMessage: string): boolean => {
+	let returnValue = result == OperationResult.Success;
+	createNotification({
+		type: returnValue ? 'success' : 'error',
+		title: returnValue ? 'Exito: ' : 'Error: ',
+		message: returnValue ? successMessage : errorMessage,
+		duration: 4
+	});
+	return returnValue;
+}
+provide("registered-questionnaires", registeredQuestionnaires);
+provide("refresh-questionnaires", loadQuestionnaires);
+provide("inform-about-result", informAboutResult);
 provide("create-notification", createNotification);
+onMounted(() => {
+	loadQuestionnaires()
+})
 </script>
 
 <template>
