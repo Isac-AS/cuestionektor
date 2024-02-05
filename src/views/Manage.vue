@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import icons from '../assets/icons/'
-import { computed, inject, onMounted, ref } from "vue";
+import { inject, onMounted, ref } from "vue";
 import { Questionnaire } from "../models/questionnaire";
 import NoQuestionnaires from "../components/NoQuestionnaires.vue"
 import { updateQuestionnaireName, deleteQuestionnaire } from "../services/questionnaire.service"
@@ -9,9 +9,6 @@ import { LoadQuestionnaires } from '../services/context.service';
 
 // Injections
 const registeredQuestionnaires = inject<Questionnaire[]>('registered-questionnaires');
-const noRegisteredQuestionnaires = computed(() => {
-    return registeredQuestionnaires!.length > 0;
-});
 const informAboutResult = inject<InformAboutResult>('inform-about-result');
 const loadQuestionnaires = inject<LoadQuestionnaires>("refresh-questionnaires");
 
@@ -55,7 +52,7 @@ onMounted(() => {
 
 <template>
     <div class="flex flex-col items-center w-full">
-        <div v-if="noRegisteredQuestionnaires">
+        <div v-if="registeredQuestionnaires!.length <= 0">
             <NoQuestionnaires />
         </div>
         <div v-else class="w-full flex flex-col items-center">

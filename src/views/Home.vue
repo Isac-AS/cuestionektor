@@ -1,13 +1,10 @@
 <script setup lang="ts">
-import { computed, inject } from "vue";
+import { inject } from "vue";
 import NoQuestionnaires from "../components/NoQuestionnaires.vue"
 import { Questionnaire } from "../models/questionnaire";
 // import icons from '../assets/icons/'
 
 const registeredQuestionnaires = inject<Questionnaire[]>('registered-questionnaires');
-const noRegisteredQuestionnaires = computed(() => {
-    return registeredQuestionnaires!.length > 0;
-});
 </script>
 
 <template>
@@ -15,7 +12,7 @@ const noRegisteredQuestionnaires = computed(() => {
         <h1 class="text-5xl font-bold mt-5">
             Cuestionektor
         </h1>
-        <div v-if="noRegisteredQuestionnaires">
+        <div v-if="registeredQuestionnaires!.length <= 0">
             <NoQuestionnaires />
         </div>
         <div v-else class="w-full flex flex-col items-center">

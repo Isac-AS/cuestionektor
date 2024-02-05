@@ -3,21 +3,14 @@ import { open } from "@tauri-apps/api/dialog";
 import { ref, inject } from "vue";
 import icons from '../assets/icons/'
 import { CreateNotification } from "../services/notifications.service";
-import { OperationResult } from "../models/view-models";
 import { parsePdf } from "../services/questionnaire.service";
+import { LoadQuestionnaires } from "../services/context.service";
+import { InformAboutResult } from "../App.vue";
 
 const createNotification = <CreateNotification>inject('create-notification');
+const refreshQuestionnaires = inject<LoadQuestionnaires>('refresh-questionnaires');
+const informAboutResult = inject<InformAboutResult>('inform-about-result');
 
-function informAboutResult(result: OperationResult, successMessage: string, errorMessage: string): boolean {
-    let returnValue = result == OperationResult.Success;
-    createNotification({
-        type: returnValue ? 'success' : 'error',
-        title: returnValue ? 'Exito: ' : 'Error: ',
-        message: returnValue ? successMessage : errorMessage,
-        duration: 3
-    });
-    return returnValue;
-}
 
 let uploadedPdfFile: any = null;
 const pdfFileName = ref('');
@@ -65,7 +58,7 @@ async function uploadPdf() {
 
     parsePdf(uploadedPdfFile, pdfFileName.value).then(
         (uploadResult) => {
-            informAboutResult(
+            informAboutResult!(
                 uploadResult.result,
                 "Documento procesado correctamente.",
                 "Error al procesar el pdf.",
@@ -73,6 +66,7 @@ async function uploadPdf() {
             pdfFileName.value = '';
             uploadedPdfFile = null;
             isProcessingPdf.value = false;
+            refreshQuestionnaires!();
         }
     );
 }
