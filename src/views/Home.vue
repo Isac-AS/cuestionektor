@@ -2,9 +2,10 @@
 import { inject } from "vue";
 import NoQuestionnaires from "../components/NoQuestionnaires.vue"
 import { Questionnaire } from "../models/questionnaire";
+import { REGISTERED_QUESTIONNAIRES_KEY } from "../injectionKeys";
 // import icons from '../assets/icons/'
 
-const registeredQuestionnaires = inject<Questionnaire[]>('registered-questionnaires');
+const registeredQuestionnaires = inject<Questionnaire[]>(REGISTERED_QUESTIONNAIRES_KEY);
 </script>
 
 <template>

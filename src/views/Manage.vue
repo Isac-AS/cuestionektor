@@ -6,11 +6,12 @@ import NoQuestionnaires from "../components/NoQuestionnaires.vue"
 import { updateQuestionnaireName, deleteQuestionnaire } from "../services/questionnaire.service"
 import { InformAboutResult } from '../App.vue';
 import { LoadQuestionnaires } from '../services/context.service';
+import { INFORM_ABOUT_RESULT_KEY, REFRESH_QUESTIONNAIRES_KEY, REGISTERED_QUESTIONNAIRES_KEY } from '../injectionKeys';
 
 // Injections
-const registeredQuestionnaires = inject<Questionnaire[]>('registered-questionnaires');
-const informAboutResult = inject<InformAboutResult>('inform-about-result');
-const loadQuestionnaires = inject<LoadQuestionnaires>("refresh-questionnaires");
+const registeredQuestionnaires = inject<Questionnaire[]>(REGISTERED_QUESTIONNAIRES_KEY);
+const informAboutResult = inject<InformAboutResult>(INFORM_ABOUT_RESULT_KEY);
+const loadQuestionnaires = inject<LoadQuestionnaires>(REFRESH_QUESTIONNAIRES_KEY);
 
 // Scoped variables
 const editing_name = ref<boolean>(false);

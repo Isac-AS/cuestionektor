@@ -8,7 +8,9 @@ export default function useContext() {
     const registeredQuestionnaires = ref<Questionnaire[]>();
     const loadQuestionnaires: LoadQuestionnaires = async () => {
         let questionnaireResponse = await getQuestionnaires();
-        registeredQuestionnaires.value = questionnaireResponse.data;
+        registeredQuestionnaires.value = questionnaireResponse.data.sort(
+            (a, b) => (a.last_accessed < b.last_accessed) ? 1 : (b.last_accessed < a.last_accessed) ? -1 : 0
+        );
     };
 
     const currentQuestionnaireId = ref();

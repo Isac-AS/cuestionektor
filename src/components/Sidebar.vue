@@ -2,6 +2,8 @@
 import { inject, ref } from 'vue'
 import icons from '../assets/icons';
 import { Questionnaire } from '../models/questionnaire';
+import { SetCurrentQuestionnaireId } from '../services/context.service';
+import { REGISTERED_QUESTIONNAIRES_KEY, SET_CURRENT_QUESTIONNAIRE_ID_KEY } from '../injectionKeys';
 
 const is_expanded = ref(localStorage.getItem("is_expanded") === "true");
 
@@ -10,7 +12,8 @@ const ToggleMenu = () => {
     localStorage.setItem("is_expanded", is_expanded.value.toString());
 }
 
-const registeredQuestionnaires = inject<Questionnaire[]>('registered-questionnaires');
+const registeredQuestionnaires = inject<Questionnaire[]>(REGISTERED_QUESTIONNAIRES_KEY);
+const setCurrentQuestionnaireId = inject<SetCurrentQuestionnaireId>(SET_CURRENT_QUESTIONNAIRE_ID_KEY);
 </script>
 
 <template>
@@ -40,13 +43,18 @@ const registeredQuestionnaires = inject<Questionnaire[]>('registered-questionnai
                 <img :src="icons.settings" class="invert w-6 lg:w-8">
                 <span :class="`${is_expanded ? '' : 'hidden'}`">Gestionar cuestionarios</span>
             </router-link>
-        </div>
-        <hr>
-        <div>
-            <div v-for="questionnaire in registeredQuestionnaires?.sort(
-                (a, b) => (a.last_accessed < b.last_accessed) ? 1 : (b.last_accessed < a.last_accessed) ? -1 : 0
-            ).slice(0, 3)">
-                {{ questionnaire.name }}
+            <hr class="w-3/4 h-px bg-wm-primary dark:bg-primary my-5">
+            <div v-for="questionnaire in registeredQuestionnaires?.slice(0, 3)"
+                class="w-full gap-1 items-center flex flex-col">
+                <router-link :to="{
+                    name: 'Cuestionario',
+                    params : {
+                        id: questionnaire.id
+                    }
+                }" class="sidebar-button" @click="setCurrentQuestionnaireId!(questionnaire.id)">
+                    <img :src="icons.question" class="invert w-6 lg:w-8">
+                    <span :class="`${is_expanded ? '' : 'hidden'}`">{{ questionnaire.name }}</span>
+                </router-link>
             </div>
         </div>
     </aside>

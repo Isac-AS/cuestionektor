@@ -6,6 +6,7 @@ import Toast from './components/Toast.vue';
 import useNotifications from './services/notifications.service';
 import { OperationResult } from './models/view-models';
 import useContext from './services/context.service';
+import { CREATE_NOTIFICATION_KEY, CURRENT_QUESTIONNAIRE_ID_KEY, INFORM_ABOUT_RESULT_KEY, REFRESH_QUESTIONNAIRES_KEY, REGISTERED_QUESTIONNAIRES_KEY, SET_CURRENT_QUESTIONNAIRE_ID_KEY } from './injectionKeys';
 
 const {
 	notifications,
@@ -38,13 +39,13 @@ const informAboutResult: InformAboutResult = (result: OperationResult, successMe
 	return returnValue;
 }
 
-provide("inform-about-result", informAboutResult);
-provide("create-notification", createNotification);
+provide(INFORM_ABOUT_RESULT_KEY, informAboutResult);
+provide(CREATE_NOTIFICATION_KEY, createNotification);
 
-provide("registered-questionnaires", registeredQuestionnaires);
-provide("refresh-questionnaires", loadQuestionnaires);
-provide("current-questionnaire-id", currentQuestionnaireId);
-provide("set-current-questionnaire-id", setCurrentQuestionnaireId);
+provide(REGISTERED_QUESTIONNAIRES_KEY, registeredQuestionnaires);
+provide(REFRESH_QUESTIONNAIRES_KEY, loadQuestionnaires);
+provide(CURRENT_QUESTIONNAIRE_ID_KEY, currentQuestionnaireId);
+provide(SET_CURRENT_QUESTIONNAIRE_ID_KEY, setCurrentQuestionnaireId);
 
 onMounted(() => {
 	loadQuestionnaires()

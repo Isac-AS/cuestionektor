@@ -6,11 +6,11 @@ import { CreateNotification } from "../services/notifications.service";
 import { parsePdf } from "../services/questionnaire.service";
 import { LoadQuestionnaires } from "../services/context.service";
 import { InformAboutResult } from "../App.vue";
+import { CREATE_NOTIFICATION_KEY, INFORM_ABOUT_RESULT_KEY, REFRESH_QUESTIONNAIRES_KEY } from "../injectionKeys";
 
-const createNotification = <CreateNotification>inject('create-notification');
-const refreshQuestionnaires = inject<LoadQuestionnaires>('refresh-questionnaires');
-const informAboutResult = inject<InformAboutResult>('inform-about-result');
-
+const createNotification = <CreateNotification>inject(CREATE_NOTIFICATION_KEY);
+const refreshQuestionnaires = inject<LoadQuestionnaires>(REFRESH_QUESTIONNAIRES_KEY);
+const informAboutResult = inject<InformAboutResult>(INFORM_ABOUT_RESULT_KEY);
 
 let uploadedPdfFile: any = null;
 const pdfFileName = ref('');
