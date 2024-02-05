@@ -45,13 +45,12 @@ const currentQuestionnaireId = inject<number>(CURRENT_QUESTIONNAIRE_ID_KEY);
                 <span :class="`${is_expanded ? '' : 'hidden'}`">Gestionar cuestionarios</span>
             </router-link>
             <hr class="w-3/4 h-px bg-wm-primary dark:bg-primary my-5">
+
             <div v-for="questionnaire in registeredQuestionnaires?.slice(0, 3)"
                 class="w-full gap-1 items-center flex flex-col">
-                <router-link to="/questionnaire"
-                    :class="`${questionnaire.id != currentQuestionnaireId ?
-                        'flex items-center transition-all duration-200 hover:bg-primary/30 p-2 m-1 gap-4 rounded-md w-5/6' :
-                        'sidebar-button'}`" 
-                        @click="openQuestionnaire!(questionnaire.id)">
+                <router-link to="/questionnaire" :class="`${questionnaire.id != currentQuestionnaireId ?
+                    'flex items-center transition-all duration-200 hover:bg-primary/30 p-2 m-1 gap-4 rounded-md w-5/6' :
+                    'sidebar-button'}`" @click="openQuestionnaire!(questionnaire.id)">
                     <img :src="icons.question" class="invert w-6 lg:w-8">
                     <span :class="`${is_expanded ? '' : 'hidden'}`">{{ questionnaire.name }}</span>
                 </router-link>

@@ -16,17 +16,13 @@ export default function useContext() {
 
     const loadedQuestions = ref<Question[]>();
     const currentQuestionnaireId = ref();
-    const openQuestionnaire: OpenQuestionnaire = (questionnaireId: number) => {
+    const openQuestionnaire: OpenQuestionnaire = async (questionnaireId: number) => {
         currentQuestionnaireId.value = questionnaireId;
         touchQuestionnaire(questionnaireId);
-        getQuestions(questionnaireId).then(
-            (questionsResponse) => {
-                loadedQuestions.value = questionsResponse.data;
-                loadedQuestions.value.sort(
-                    (a, b) => (a.question_number > b.question_number) ? 1 : (b.question_number > a.question_number) ? -1 : 0
-                )
-            }
-        );
+        loadedQuestions.value = (await getQuestions(questionnaireId)).data;;
+        loadedQuestions.value.sort(
+            (a, b) => (a.question_number > b.question_number) ? 1 : (b.question_number > a.question_number) ? -1 : 0
+        )
     }
 
     return {

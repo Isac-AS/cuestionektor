@@ -13,7 +13,7 @@ const registeredQuestionnaires = inject<Questionnaire[]>(REGISTERED_QUESTIONNAIR
         <h1 class="text-5xl font-bold mt-5">
             Cuestionektor
         </h1>
-        <div v-if="registeredQuestionnaires!.length <= 0">
+        <div v-if="registeredQuestionnaires && registeredQuestionnaires.length <= 0">
             <NoQuestionnaires />
         </div>
         <div v-else class="w-full flex flex-col items-center">

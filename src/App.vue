@@ -50,7 +50,8 @@ provide(GET_QUESTIONS_KEY, loadedQuestions);
 provide(OPEN_QUESTIONNAIRE_KEY, openQuestionnaire);
 
 onMounted(() => {
-	loadQuestionnaires()
+	loadQuestionnaires();
+	
 })
 </script>
 
