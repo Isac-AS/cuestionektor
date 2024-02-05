@@ -24,10 +24,9 @@ const routes = [
 		component: () => import('../views/Manage.vue')
 	},
 	{
-		path: '/questionnaire:id',
+		path: '/questionnaire',
 		name: 'Cuestionario',
 		component: () => import('../views/Questionnaire.vue'),
-		props: true
 	},
 ]
 

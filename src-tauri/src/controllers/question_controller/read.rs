@@ -6,7 +6,7 @@ use crate::models::{
     view_models::{BackendResponse, OperationResult},
 };
 
-#[tauri::command]
+#[tauri::command(async)]
 pub fn get_questions(
     questionnaire_id: i32,
     db: tauri::State<Database>,
@@ -28,7 +28,7 @@ pub fn get_questions(
 
     let questions = questions
         .into_iter()
-        .filter(|q| q.questionnaire_id != questionnaire_id)
+        .filter(|q| q.questionnaire_id == questionnaire_id)
         .collect();
     BackendResponse::new(OperationResult::Success, questions)
 }

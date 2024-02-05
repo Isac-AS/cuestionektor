@@ -2,8 +2,8 @@
 import { inject, ref } from 'vue'
 import icons from '../assets/icons';
 import { Questionnaire } from '../models/questionnaire';
-import { SetCurrentQuestionnaireId } from '../services/context.service';
-import { REGISTERED_QUESTIONNAIRES_KEY, SET_CURRENT_QUESTIONNAIRE_ID_KEY } from '../injectionKeys';
+import { OpenQuestionnaire } from '../services/context.service';
+import { CURRENT_QUESTIONNAIRE_ID_KEY, OPEN_QUESTIONNAIRE_KEY, REGISTERED_QUESTIONNAIRES_KEY } from '../injectionKeys';
 
 const is_expanded = ref(localStorage.getItem("is_expanded") === "true");
 
@@ -13,7 +13,8 @@ const ToggleMenu = () => {
 }
 
 const registeredQuestionnaires = inject<Questionnaire[]>(REGISTERED_QUESTIONNAIRES_KEY);
-const setCurrentQuestionnaireId = inject<SetCurrentQuestionnaireId>(SET_CURRENT_QUESTIONNAIRE_ID_KEY);
+const openQuestionnaire = inject<OpenQuestionnaire>(OPEN_QUESTIONNAIRE_KEY);
+const currentQuestionnaireId = inject<number>(CURRENT_QUESTIONNAIRE_ID_KEY);
 </script>
 
 <template>
@@ -46,12 +47,11 @@ const setCurrentQuestionnaireId = inject<SetCurrentQuestionnaireId>(SET_CURRENT_
             <hr class="w-3/4 h-px bg-wm-primary dark:bg-primary my-5">
             <div v-for="questionnaire in registeredQuestionnaires?.slice(0, 3)"
                 class="w-full gap-1 items-center flex flex-col">
-                <router-link :to="{
-                    name: 'Cuestionario',
-                    params : {
-                        id: questionnaire.id
-                    }
-                }" class="sidebar-button" @click="setCurrentQuestionnaireId!(questionnaire.id)">
+                <router-link to="/questionnaire"
+                    :class="`${questionnaire.id != currentQuestionnaireId ?
+                        'flex items-center transition-all duration-200 hover:bg-primary/30 p-2 m-1 gap-4 rounded-md w-5/6' :
+                        'sidebar-button'}`" 
+                        @click="openQuestionnaire!(questionnaire.id)">
                     <img :src="icons.question" class="invert w-6 lg:w-8">
                     <span :class="`${is_expanded ? '' : 'hidden'}`">{{ questionnaire.name }}</span>
                 </router-link>

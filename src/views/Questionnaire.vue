@@ -1,31 +1,13 @@
 <script setup lang="ts">
-import { inject, onUpdated, ref } from 'vue';
-import { getQuestions } from '../services/question.service';
+import { inject, ref } from 'vue';
 import { InformAboutResult } from '../App.vue';
 import { Question } from '../models/questionnaire';
-import { INFORM_ABOUT_RESULT_KEY } from '../injectionKeys';
+import { GET_QUESTIONS_KEY, INFORM_ABOUT_RESULT_KEY } from '../injectionKeys';
 
 const informAboutResult = inject<InformAboutResult>(INFORM_ABOUT_RESULT_KEY);
-const questions = ref<Question[]>();
+const questions = inject<Question[]>(GET_QUESTIONS_KEY);
 
-const props = defineProps<{id: number}>();
 
-async function fetchQuestions(questionnaireId: number) {
-    await getQuestions(questionnaireId).then(
-        (questionsResponse) => {
-            informAboutResult!(
-                questionsResponse.result,
-                "Cuestionarios cargados con exito.",
-                "Error cargando cuestionarios.",
-            );
-            questions.value = questionsResponse.data;
-        }
-    );
-}
-
-onUpdated(() => {
-    fetchQuestions(+props.id);
-})
 </script>
 
 <template>

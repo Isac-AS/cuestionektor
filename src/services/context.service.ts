@@ -1,9 +1,10 @@
 import { ref } from "vue";
-import { Questionnaire } from "../models/questionnaire";
-import { getQuestionnaires } from "./questionnaire.service";
+import { Question, Questionnaire } from "../models/questionnaire";
+import { getQuestionnaires, touchQuestionnaire } from "./questionnaire.service";
+import { getQuestions } from "./question.service";
 
 export type LoadQuestionnaires = { (): Promise<void> };
-export type SetCurrentQuestionnaireId = { (id: number): void };
+export type OpenQuestionnaire = { (questionnaireId: number): void };
 export default function useContext() {
     const registeredQuestionnaires = ref<Questionnaire[]>();
     const loadQuestionnaires: LoadQuestionnaires = async () => {
@@ -13,15 +14,26 @@ export default function useContext() {
         );
     };
 
+    const loadedQuestions = ref<Question[]>();
     const currentQuestionnaireId = ref();
-    const setCurrentQuestionnaireId: SetCurrentQuestionnaireId = (id: number) => {
-        currentQuestionnaireId.value = id;
+    const openQuestionnaire: OpenQuestionnaire = (questionnaireId: number) => {
+        currentQuestionnaireId.value = questionnaireId;
+        touchQuestionnaire(questionnaireId);
+        getQuestions(questionnaireId).then(
+            (questionsResponse) => {
+                loadedQuestions.value = questionsResponse.data;
+                loadedQuestions.value.sort(
+                    (a, b) => (a.question_number > b.question_number) ? 1 : (b.question_number > a.question_number) ? -1 : 0
+                )
+            }
+        );
     }
 
     return {
         registeredQuestionnaires,
         loadQuestionnaires,
         currentQuestionnaireId,
-        setCurrentQuestionnaireId
+        loadedQuestions,
+        openQuestionnaire
     }
 }
