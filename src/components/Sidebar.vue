@@ -30,19 +30,19 @@ const currentQuestionnaireId = inject<number>(CURRENT_QUESTIONNAIRE_ID_KEY);
         <div class="flex flex-col gap-1 w-full items-center">
             <router-link to="/" class="sidebar-button">
                 <img :src="icons.home" class="invert w-6 lg:w-8">
-                <span :class="`${is_expanded ? '' : 'hidden'}`">Inicio</span>
+                <span v-if="is_expanded">Inicio</span>
             </router-link>
             <router-link to="/create" class="sidebar-button">
                 <img :src="icons.add" class="invert w-6 lg:w-8">
-                <span :class="`${is_expanded ? '' : 'hidden'}`">Crear cuestionario</span>
+                <span v-if="is_expanded">Crear cuestionario</span>
             </router-link>
             <router-link to="/create-from-file" class="sidebar-button">
                 <img :src="icons.file" class="invert w-6 lg:w-8">
-                <span :class="`${is_expanded ? '' : 'hidden'}`">Subir un fichero</span>
+                <span v-if="is_expanded">Subir un fichero</span>
             </router-link>
             <router-link to="/manage" class="sidebar-button">
                 <img :src="icons.settings" class="invert w-6 lg:w-8">
-                <span :class="`${is_expanded ? '' : 'hidden'}`">Gestionar cuestionarios</span>
+                <span v-if="is_expanded">Gestionar cuestionarios</span>
             </router-link>
             <hr class="w-3/4 h-px bg-wm-primary dark:bg-primary my-5">
 
@@ -52,7 +52,7 @@ const currentQuestionnaireId = inject<number>(CURRENT_QUESTIONNAIRE_ID_KEY);
                     'flex items-center transition-all duration-200 hover:bg-primary/30 p-2 m-1 gap-4 rounded-md w-5/6' :
                     'sidebar-button'}`" @click="openQuestionnaire!(questionnaire.id)">
                     <img :src="icons.question" class="invert w-6 lg:w-8">
-                    <span :class="`${is_expanded ? '' : 'hidden'}`">{{ questionnaire.name }}</span>
+                    <span v-if="is_expanded">{{ questionnaire.name }}</span>
                 </router-link>
             </div>
         </div>

@@ -17,3 +17,10 @@
 .btn-secondary-variant {
     @apply flex bg-wm-secondary-variant dark:bg-secondary text-wm-OnPrimary dark:text-OnSecondary rounded shadow-md p-1 hover:brightness-110 items-center;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
