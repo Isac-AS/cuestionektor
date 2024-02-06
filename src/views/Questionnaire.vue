@@ -42,15 +42,15 @@ onUnmounted(() => {
                 <img :src="icons.arrow_left" :class="`${filtersExpanded ? 'rotate-180' : ''}`"
                     class="invert w-7 lg:w-9 transition-all duration-300">
             </button>
-            <button class="filter-button">
+            <button class="flex items-center justify-start transition-all duration-200 hover:bg-primary/30 p-2 m-1 gap-4 rounded-md w-5/6">
                 <img :src="icons.question" class="invert w-6 lg:w-8">
                 <span v-if="filtersExpanded">Modo cuestionario</span>
             </button>
-            <button class="filter-button">
+            <button class="flex items-center justify-start transition-all duration-200 hover:bg-primary/30 p-2 m-1 gap-4 rounded-md w-5/6">
                 <img :src="icons.arrow_right" class="invert w-6 lg:w-8">
                 <span v-if="filtersExpanded">Siguiente</span>
             </button>
-            <button class="filter-button">
+            <button class="flex items-center justify-start transition-all duration-200 hover:bg-primary/30 p-2 m-1 gap-4 rounded-md w-5/6">
                 <img :src="icons.arrow_left" class="invert w-6 lg:w-8">
                 <span v-if="filtersExpanded">Anterior</span>
             </button>
@@ -58,12 +58,10 @@ onUnmounted(() => {
                 <span v-if="filtersExpanded">Numero de preguntas</span>
                 <input type="number" class="p-1 w-[95%] text-OnPrimary text-xl rounded outline-none text-center" v-model="endIndex">
             </div>
+            <div class="flex items-center m-1 p-2 gap-4 w-5/6">
+                <span v-if="filtersExpanded">Agrupar por tema</span>
+                <input type="text" class="p-1 w-[95%] text-OnPrimary text-xl rounded outline-none text-center">
+            </div>
         </aside>
     </div>
 </template>
-
-<style scoped>
-.filter-button {
-    @apply flex items-center justify-start transition-all duration-200 hover:bg-primary/30 p-2 m-1 gap-4 rounded-md w-5/6;
-}
-</style>
