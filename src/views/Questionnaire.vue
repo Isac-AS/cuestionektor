@@ -16,6 +16,10 @@ const ToggleFilters = () => {
     filtersExpanded.value = !filtersExpanded.value;
 }
 
+// Sidebar booleans
+const showAnswersInGrid = ref(false);
+const questionnaireMode = ref(false);
+
 // Questions shown
 const startIndex = ref(0);
 const endIndex = ref(20);
@@ -57,7 +61,7 @@ onUnmounted(() => {
     <div class="w-100 flex">
         <div class="flex flex-col w-full p-6 gap-6">
             <div v-for="question in questions?.slice(startIndex, endIndex)">
-                <QuestionComponent v-bind:question="question" />
+                <QuestionComponent v-bind:question="question" v-bind:showAnswersInGrid="showAnswersInGrid" v-bind:questionnaireMode="questionnaireMode" />
             </div>
         </div>
         <aside :class="`${filtersExpanded ? 'w-80 lg:w-96' : 'w-16 lg:w-20'}`"
@@ -67,10 +71,16 @@ onUnmounted(() => {
                 <img :src="icons.arrow_left" :class="`${filtersExpanded ? 'rotate-180' : ''}`"
                     class="invert w-7 lg:w-9 transition-all duration-300">
             </button>
-            <button
-                class="flex items-center justify-start transition-all duration-200 hover:bg-primary/30 p-2 m-1 gap-4 rounded-md w-5/6">
-                <img :src="icons.question" class="invert w-6 lg:w-8">
+            <button @click="questionnaireMode = !questionnaireMode"
+                class="flex items-center justify-start transition-all duration-200 hover:bg-primary/30 p-2 m-1 gap-4 rounded-md w-5/6"
+                :class="`${questionnaireMode ? 'dark:bg-primary/30 border-l-4 border-primary' : ''}`">
+                <img :src="icons.dynamic_form" class="invert w-6 lg:w-8">
                 <span v-if="filtersExpanded">Modo cuestionario</span>
+            </button>
+            <button @click="showAnswersInGrid = !showAnswersInGrid"
+                class="flex items-center justify-start transition-all duration-200 hover:bg-primary/30 p-2 m-1 gap-4 rounded-md w-5/6">
+                <img :src="showAnswersInGrid ? icons.table_rows : icons.grid_view" class="invert w-6 lg:w-8 transition-all duration-500">
+                <span v-if="filtersExpanded">Apariencia</span>
             </button>
             <button
                 class="flex items-center justify-start transition-all duration-200 hover:bg-primary/30 p-2 m-1 gap-4 rounded-md w-5/6"
@@ -86,9 +96,8 @@ onUnmounted(() => {
             </button>
             <div class="flex items-center m-1 p-2 gap-4 w-5/6">
                 <span v-if="filtersExpanded">Numero de preguntas</span>
-                <input type="number" class="p-1 w-[95%] text-OnPrimary text-xl rounded outline-none text-center"
-                    min="1" :max="questions!.length"
-                    v-model="questionsPerPage" v-on:change="updateEndIndex()">
+                <input type="number" class="p-1 w-[95%] text-OnPrimary text-xl rounded outline-none text-center" min="1"
+                    :max="questions!.length" v-model="questionsPerPage" v-on:change="updateEndIndex()">
             </div>
             <div class="flex items-center m-1 p-2 gap-4 w-5/6">
                 <span v-if="filtersExpanded">Agrupar por tema</span>
