@@ -19,7 +19,7 @@ const currentQuestionnaireId = inject<number>(CURRENT_QUESTIONNAIRE_ID_KEY);
 
 <template>
     <aside :class="`${is_expanded ? 'w-80 lg:w-96' : 'w-16 lg:w-20'}`"
-        class="flex flex-col dark:bg-surface-dp6 shadow transition-all duration-300 items-center z-30">
+        class="sticky top-0 h-screen flex flex-col dark:bg-surface-dp6 shadow transition-all duration-300 items-center">
 
         <button @click="ToggleMenu"
             class="my-5 p-2 w-5/6 flex justify-center rounded bg-surface-dp12 shadow-lg transition-all hover:bg-surface-dp24 duration-200">

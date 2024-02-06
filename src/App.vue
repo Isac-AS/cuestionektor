@@ -58,9 +58,11 @@ onMounted(() => {
 <template>
 	<div class="app flex flex-col h-full">
 		<AppBar />
-		<div class="flex h-full">
+		<div class="flex">
 			<Sidebar />
-			<router-view />
+			<main class="h-full w-full">
+				<router-view />
+			</main>
 		</div>
 	</div>
 

@@ -5,7 +5,7 @@ import { useRoute } from 'vue-router';
 </script>
 
 <template>
-    <div class="flex h-14 lg:h-16 items-center bg-surface-dp24 shadow-md justify-between z-50">
+    <div class="flex h-14 lg:h-16 items-center bg-surface-dp24 shadow-md justify-between">
         <div class="flex items-center">
             <router-link to="/">
                 <img :src="logoURL" class="h-14 lg:h-16 ml-1" alt="Cuestionektor logo" />
