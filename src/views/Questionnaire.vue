@@ -59,7 +59,7 @@ onUnmounted(() => {
 
 <template>
     <div class="w-100 flex">
-        <div class="flex flex-col w-full p-6 gap-6">
+        <div class="flex flex-col w-full p-6 gap-12">
             <div v-for="question in questions?.slice(startIndex, endIndex)">
                 <QuestionComponent v-bind:question="question" v-bind:showAnswersInGrid="showAnswersInGrid" v-bind:questionnaireMode="questionnaireMode" />
             </div>

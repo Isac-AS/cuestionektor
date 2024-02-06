@@ -11,7 +11,7 @@ defineProps<{
 
 <template>
     <div class="flex flex-col dark:bg-surface-dp6 p-4 rounded shadow-md">
-        <h1 class="text-2xl font-semibold text-justify rounded shadow-lg dark:bg-surface-dp24 p-2">
+        <h1 class="text-2xl font-semibold text-justify rounded shadow-lg dark:bg-surface-dp8 p-2">
             {{ question.heading }}
         </h1>
         <div class="grid grid-cols-1 gap-5 mt-5" :class="`${showAnswersInGrid ? 'lg:grid-cols-2' : ''}`">
