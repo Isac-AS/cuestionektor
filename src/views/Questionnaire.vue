@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { inject, onUnmounted, ref } from 'vue';
-import { Question } from '../models/questionnaire';
+import { AnswerState, Question } from '../models/questionnaire';
 import { GET_QUESTIONS_KEY, REFRESH_QUESTIONNAIRES_KEY } from '../injectionKeys';
 import { LoadQuestionnaires } from '../services/context.service';
 import QuestionComponent from '../components/QuestionComponent.vue';
@@ -18,7 +18,18 @@ const ToggleFilters = () => {
 
 // Sidebar booleans
 const showAnswersInGrid = ref(false);
-const questionnaireMode = ref(false);
+const editMode = ref(false);
+
+// Filters
+const answerStateFilter = ref<AnswerState>(AnswerState.All);
+
+function updateAnswerState(newAnswerState: AnswerState) {
+    if (answerStateFilter.value == newAnswerState) {
+        answerStateFilter.value = AnswerState.All
+    } else {
+        answerStateFilter.value = newAnswerState
+    }
+}
 
 // Questions shown
 const startIndex = ref(0);
@@ -61,7 +72,7 @@ onUnmounted(() => {
     <div class="w-100 flex">
         <div class="flex flex-col w-full p-6 gap-12">
             <div v-for="question in questions?.slice(startIndex, endIndex)">
-                <QuestionComponent v-bind:question="question" v-bind:showAnswersInGrid="showAnswersInGrid" v-bind:questionnaireMode="questionnaireMode" />
+                <QuestionComponent v-bind:question="question" v-bind:showAnswersInGrid="showAnswersInGrid" />
             </div>
         </div>
         <aside :class="`${filtersExpanded ? 'w-80 lg:w-96' : 'w-16 lg:w-20'}`"
@@ -71,38 +82,66 @@ onUnmounted(() => {
                 <img :src="icons.arrow_left" :class="`${filtersExpanded ? 'rotate-180' : ''}`"
                     class="invert w-7 lg:w-9 transition-all duration-300">
             </button>
-            <button @click="questionnaireMode = !questionnaireMode"
-                class="flex items-center justify-start transition-all duration-200 hover:bg-primary/30 p-2 m-1 gap-4 rounded-md w-5/6"
-                :class="`${questionnaireMode ? 'dark:bg-primary/30 border-l-4 border-primary' : ''}`">
-                <img :src="icons.dynamic_form" class="invert w-6 lg:w-8">
-                <span v-if="filtersExpanded">Modo cuestionario</span>
-            </button>
+
             <button @click="showAnswersInGrid = !showAnswersInGrid"
-                class="flex items-center justify-start transition-all duration-200 hover:bg-primary/30 p-2 m-1 gap-4 rounded-md w-5/6">
-                <img :src="showAnswersInGrid ? icons.table_rows : icons.grid_view" class="invert w-6 lg:w-8 transition-all duration-500">
+                class="flex items-center transition-all duration-200 hover:bg-primary/30 p-1 m-1 gap-4 rounded-md w-5/6"
+                :class="`${filtersExpanded ? 'justify-start' : 'justify-center'}`">
+                <img :src="showAnswersInGrid ? icons.table_rows : icons.grid_view"
+                    class="invert w-6 lg:w-8 transition-all duration-500">
                 <span v-if="filtersExpanded">Apariencia</span>
             </button>
-            <button
-                class="flex items-center justify-start transition-all duration-200 hover:bg-primary/30 p-2 m-1 gap-4 rounded-md w-5/6"
+            <hr class="w-3/4 h-px">
+            <button :class="`${filtersExpanded ? 'justify-start' : 'justify-center'}`"
+                class="flex items-center transition-all duration-200 hover:bg-primary/30 p-1 m-1 gap-4 rounded-md w-5/6"
                 @click="next()">
                 <img :src="icons.arrow_right" class="invert w-6 lg:w-8">
                 <span v-if="filtersExpanded">Siguiente</span>
             </button>
-            <button
-                class="flex items-center justify-start transition-all duration-200 hover:bg-primary/30 p-2 m-1 gap-4 rounded-md w-5/6"
-                @click="prev()">
+            <button class="flex items-center transition-all duration-200 hover:bg-primary/30 p-1 m-1 gap-4 rounded-md w-5/6"
+                :class="`${filtersExpanded ? 'justify-start' : 'justify-center'}`" @click="prev()">
                 <img :src="icons.arrow_left" class="invert w-6 lg:w-8">
                 <span v-if="filtersExpanded">Anterior</span>
             </button>
-            <div class="flex items-center m-1 p-2 gap-4 w-5/6">
+            <div class="flex items-center m-1 p-1 gap-4 w-5/6"
+                :class="`${filtersExpanded ? 'justify-start' : 'justify-center'}`">
                 <span v-if="filtersExpanded">Numero de preguntas</span>
                 <input type="number" class="p-1 w-[95%] text-OnPrimary text-xl rounded outline-none text-center" min="1"
-                    :max="questions!.length" v-model="questionsPerPage" v-on:change="updateEndIndex()">
+                    :max="questions?.length" v-model="questionsPerPage" v-on:change="updateEndIndex()">
             </div>
-            <div class="flex items-center m-1 p-2 gap-4 w-5/6">
+            <hr class="w-3/4 h-px">
+            <button @click="editMode = !editMode"
+                class="flex items-center transition-all duration-200 hover:bg-primary/30 p-1 m-1 gap-4 rounded-md w-5/6"
+                :class="`${editMode ? 'dark:bg-primary/30 border-l-4 border-primary' : ''} ${filtersExpanded ? 'justify-start' : 'justify-center'}`">
+                <img :src="icons.edit" class="invert w-6 lg:w-8">
+                <span v-if="filtersExpanded">Habilitar edicion</span>
+            </button>
+            <hr class="w-3/4 h-px">
+            <div class="flex items-center m-1 p-1 gap-4 w-5/6"
+                :class="`${filtersExpanded ? 'justify-start' : 'justify-center'}`">
                 <span v-if="filtersExpanded">Agrupar por tema</span>
                 <input type="text" class="p-1 w-[95%] text-OnPrimary text-xl rounded outline-none text-center">
             </div>
+            <button v-if="!editMode"
+                class="flex items-center transition-all duration-200 hover:bg-primary/30 p-1 m-1 gap-4 rounded-md w-5/6"
+                :class="`${answerStateFilter == AnswerState.Correct ? 'dark:bg-primary/30 border-l-4 border-primary' : ''} ${filtersExpanded ? 'justify-start' : 'justify-center'}`"
+                @click="updateAnswerState(AnswerState.Correct)">
+                <img :src="icons.check_circle" class="invert w-6 lg:w-8">
+                <span v-if="filtersExpanded">Mostrar aciertos</span>
+            </button>
+            <button v-if="!editMode"
+                class="flex items-center transition-all duration-200 hover:bg-primary/30 p-1 m-1 gap-4 rounded-md w-5/6"
+                :class="`${answerStateFilter == AnswerState.Incorrect ? 'dark:bg-primary/30 border-l-4 border-primary' : ''} ${filtersExpanded ? 'justify-start' : 'justify-center'}`"
+                @click="updateAnswerState(AnswerState.Incorrect)">
+                <img :src="icons.cancel_circle" class="invert w-6 lg:w-8">
+                <span v-if="filtersExpanded">Mostrar fallos</span>
+            </button>
+            <button v-if="!editMode"
+                class="flex items-center transition-all duration-200 hover:bg-primary/30 p-1 m-1 gap-4 rounded-md w-5/6"
+                :class="`${answerStateFilter == AnswerState.Unanswered ? 'dark:bg-primary/30 border-l-4 border-primary' : ''} ${filtersExpanded ? 'justify-start' : 'justify-center'}`"
+                @click="updateAnswerState(AnswerState.Unanswered)">
+                <img :src="icons.help_circle" class="invert w-6 lg:w-8">
+                <span v-if="filtersExpanded">Preguntas sin contestar</span>
+            </button>
         </aside>
     </div>
 </template>

@@ -12,10 +12,18 @@ export interface Question {
     answers: Answer[],
     topic: string,
     explanation: string,
+    answeredCorrectly?: boolean,
 }
 
 export interface Questionnaire {
     id: number,
     name: string,
     last_accessed: string,
+}
+
+export enum AnswerState {
+    Correct,
+    Incorrect,
+    Unanswered,
+    All
 }
