@@ -7,7 +7,7 @@ export async function getQuestions(questionnaireId: number): Promise<BackendResp
 }
 
 export async function updateQuestion(id: number, question: Question): Promise<BackendResponse<string>> {
-    return await invoke<BackendResponse<string>>("update_questionnaire_name", { id: id, questionToUpdate: question });
+    return await invoke<BackendResponse<string>>("update_question", { id: id, questionToUpdate: question });
 }
 
 export async function deleteQuestion(id: number): Promise<BackendResponse<string>> {
