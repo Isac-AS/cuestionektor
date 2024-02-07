@@ -47,7 +47,7 @@ async function saveQuestion() {
                     class="text-lg dark:hover:bg-primary/15 transition-all duration-200 px-5 py-2 rounded shadow-md w-full text-justify flex h-full"
                     :class="`
                         ${props.question.answeredCorrectly !== undefined && answer.is_correct ? 'bg-green-600/50 dark:bg-green-400/40 hover:bg-green-600/50 dark:hover:bg-green-300/40' : ''} 
-                                                                                                                            ${props.question.answeredCorrectly === false && !answer.is_correct ? 'bg-wm-error/50 dark:bg-error/45 hover:bg-wm-error/55 dark:hover:bg-error/60' : ''}
+                        ${props.question.answeredCorrectly === false && !answer.is_correct ? 'bg-wm-error/50 dark:bg-error/45 hover:bg-wm-error/55 dark:hover:bg-error/60' : ''}
                         `">
                     <p class="mr-4">{{ answer.prefix + ")" }}</p>
                     <p>{{ answer.text }}</p>
