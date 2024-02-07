@@ -4,6 +4,7 @@ import { AnswerState, Question } from '../models/questionnaire';
 import { GET_QUESTIONS_KEY, REFRESH_QUESTIONNAIRES_KEY } from '../injectionKeys';
 import { LoadQuestionnaires } from '../services/context.service';
 import QuestionComponent from '../components/QuestionComponent.vue';
+import EditableQuestion from '../components/EditableQuestion.vue'
 import icons from '../assets/icons';
 
 // Injections
@@ -90,9 +91,14 @@ onUnmounted(() => {
 
 <template>
     <div class="w-100 flex">
-        <div class="flex flex-col w-full p-6 gap-12">
+        <div v-if="!editMode" class="flex flex-col w-full p-6 gap-12">
             <div v-for="question in questions?.filter((q) => applyTopicFilter(q)).filter((q) => applyStateFilter(q)).slice(startIndex, endIndex)">
                 <QuestionComponent v-bind:question="question" v-bind:showAnswersInGrid="showAnswersInGrid" />
+            </div>
+        </div>
+        <div v-else class="flex flex-col w-full p-6 gap-12">
+            <div v-for="question in questions?.filter((q) => applyTopicFilter(q)).slice(startIndex, endIndex)">
+                <EditableQuestion v-bind:question="question" v-bind:showAnswersInGrid="showAnswersInGrid" />
             </div>
         </div>
         <aside :class="`${filtersExpanded ? 'w-80 lg:w-96' : 'w-16 lg:w-20'}`"
