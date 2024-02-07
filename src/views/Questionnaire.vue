@@ -30,6 +30,26 @@ function updateAnswerState(newAnswerState: AnswerState) {
         answerStateFilter.value = newAnswerState
     }
 }
+function applyStateFilter(question: Question): boolean {
+    switch (answerStateFilter.value) {
+        case AnswerState.All:
+            return true;
+        case AnswerState.Correct:
+            return question.answeredCorrectly == true;
+        case AnswerState.Incorrect:
+            return question.answeredCorrectly == false;
+        case AnswerState.Unanswered:
+            return question.answeredCorrectly == undefined;
+    }
+}
+
+const topicFilter = ref('');
+function applyTopicFilter(question: Question): boolean {
+    if (topicFilter.value.length == 0) {
+        return true;
+    } 
+    return question.topic.includes(topicFilter.value);
+}
 
 // Questions shown
 const startIndex = ref(0);
@@ -71,7 +91,7 @@ onUnmounted(() => {
 <template>
     <div class="w-100 flex">
         <div class="flex flex-col w-full p-6 gap-12">
-            <div v-for="question in questions?.slice(startIndex, endIndex)">
+            <div v-for="question in questions?.filter((q) => applyTopicFilter(q)).filter((q) => applyStateFilter(q)).slice(startIndex, endIndex)">
                 <QuestionComponent v-bind:question="question" v-bind:showAnswersInGrid="showAnswersInGrid" />
             </div>
         </div>
@@ -119,7 +139,7 @@ onUnmounted(() => {
             <div class="flex items-center m-1 p-1 gap-4 w-5/6"
                 :class="`${filtersExpanded ? 'justify-start' : 'justify-center'}`">
                 <span v-if="filtersExpanded">Agrupar por tema</span>
-                <input type="text" class="p-1 w-[95%] text-OnPrimary text-xl rounded outline-none text-center">
+                <input type="text" class="p-1 w-[95%] text-OnPrimary text-xl rounded outline-none text-center" v-model="topicFilter">
             </div>
             <button v-if="!editMode"
                 class="flex items-center transition-all duration-200 hover:bg-primary/30 p-1 m-1 gap-4 rounded-md w-5/6"
