@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import { Question } from '../models/questionnaire';
+import { marked } from "marked";
 import icons from '../assets/icons';
-import { inject, ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 import { updateQuestion } from '../services/question.service';
 import { InformAboutResult } from '../App.vue';
 import { INFORM_ABOUT_RESULT_KEY } from '../injectionKeys';
+import input from 'postcss/lib/input';
 
 const props = defineProps<{
     question: Question,
@@ -14,6 +16,7 @@ const informAboutResult = inject<InformAboutResult>(INFORM_ABOUT_RESULT_KEY);
 
 const editingTopic = ref(false);
 const editingExplanation = ref(false);
+const explanation = computed(() => marked.parse(props.question.explanation));
 
 const tempTopic = ref('');
 const tempExplanation = ref('');
@@ -28,7 +31,7 @@ async function saveQuestion() {
     informAboutResult!(
         questionUpdateResponse.result,
         "Pregunta modificada",
-        questionUpdateResponse.result
+        questionUpdateResponse.data
     );
 }
 </script>
@@ -44,7 +47,7 @@ async function saveQuestion() {
                     class="text-lg dark:hover:bg-primary/15 transition-all duration-200 px-5 py-2 rounded shadow-md w-full text-justify flex h-full"
                     :class="`
                         ${props.question.answeredCorrectly !== undefined && answer.is_correct ? 'bg-green-600/50 dark:bg-green-400/40 hover:bg-green-600/50 dark:hover:bg-green-300/40' : ''} 
-                                                                ${props.question.answeredCorrectly === false && !answer.is_correct ? 'bg-wm-error/50 dark:bg-error/45 hover:bg-wm-error/55 dark:hover:bg-error/60' : ''}
+                                                                                                                            ${props.question.answeredCorrectly === false && !answer.is_correct ? 'bg-wm-error/50 dark:bg-error/45 hover:bg-wm-error/55 dark:hover:bg-error/60' : ''}
                         `">
                     <p class="mr-4">{{ answer.prefix + ")" }}</p>
                     <p>{{ answer.text }}</p>
@@ -91,8 +94,9 @@ async function saveQuestion() {
                         </button>
                     </div>
                 </div>
-                <div v-if="!editingExplanation" v-html="props.question.explanation"></div>
-                <textarea v-if="editingExplanation" v-model="tempExplanation" class="rounded text-OnPrimary h-32 dark:bg-gray-200 focus:outline-secondary"></textarea>
+                <div v-if="!editingExplanation" v-html="explanation"></div>
+                <textarea v-if="editingExplanation" v-model="tempExplanation"
+                    class="rounded text-OnPrimary h-32 dark:bg-gray-200 focus:outline-secondary"></textarea>
             </div>
         </div>
     </div>

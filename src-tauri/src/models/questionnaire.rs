@@ -37,7 +37,7 @@ pub struct Question {
 impl Question {
     pub fn new_from(questionnaire_id: i32, question: &Question) -> Question {
         Question {
-            id: rand::random(),
+            id: question.id,
             questionnaire_id,
             question_number: question.question_number,
             heading: question.heading.clone(),

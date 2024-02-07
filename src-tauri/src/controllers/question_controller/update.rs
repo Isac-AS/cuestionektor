@@ -22,11 +22,18 @@ pub fn update_question(
 
     let original_question: Question = match rw.get().primary(id) {
         Ok(Some(q)) => q,
-        Ok(None) | Err(_) => {
-            error!("Failed to read question.");
+        Ok(None) => {
+            error!("Failed to read question. get().primary() succeeded but got None.");
             return BackendResponse::new(
                 OperationResult::Fail,
-                String::from("Failed to read question"),
+                String::from("Failed to read question. Got None."),
+            );
+        }
+        Err(err) => {
+            error!("Failed to read question.\nError: {}", err);
+            return BackendResponse::new(
+                OperationResult::Fail,
+                String::from("Failed to read question. Database error."),
             );
         }
     };
