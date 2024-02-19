@@ -7,3 +7,4 @@ export const REFRESH_QUESTIONNAIRES_KEY = "refresh-questionnaires";
 export const CURRENT_QUESTIONNAIRE_ID_KEY = "get-current-questionnaire-id";
 export const GET_QUESTIONS_KEY = "get-loaded-questions";
 export const OPEN_QUESTIONNAIRE_KEY = "open-questionnaire";
+export const REMOVE_QUESTION_KEY = "remove-question";

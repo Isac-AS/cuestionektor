@@ -5,6 +5,7 @@ import { getQuestions } from "./question.service";
 
 export type LoadQuestionnaires = { (): Promise<void> };
 export type OpenQuestionnaire = { (questionnaireId: number): void };
+export type RemoveQuestion = { (question: Question): Promise<void> };
 export default function useContext() {
     const registeredQuestionnaires = ref<Questionnaire[]>();
     const loadQuestionnaires: LoadQuestionnaires = async () => {
@@ -19,7 +20,14 @@ export default function useContext() {
     const openQuestionnaire: OpenQuestionnaire = async (questionnaireId: number) => {
         currentQuestionnaireId.value = questionnaireId;
         touchQuestionnaire(questionnaireId);
-        loadedQuestions.value = (await getQuestions(questionnaireId)).data;;
+        loadedQuestions.value = (await getQuestions(questionnaireId)).data;
+        loadedQuestions.value.sort(
+            (a, b) => (a.question_number > b.question_number) ? 1 : (b.question_number > a.question_number) ? -1 : 0
+        )
+    }
+
+    const removeQuestion: RemoveQuestion = async (question: Question) => {
+        loadedQuestions.value = loadedQuestions!.value!.filter(obj => { return obj !== question});
         loadedQuestions.value.sort(
             (a, b) => (a.question_number > b.question_number) ? 1 : (b.question_number > a.question_number) ? -1 : 0
         )
@@ -30,6 +38,7 @@ export default function useContext() {
         loadQuestionnaires,
         currentQuestionnaireId,
         loadedQuestions,
-        openQuestionnaire
+        openQuestionnaire,
+        removeQuestion
     }
 }

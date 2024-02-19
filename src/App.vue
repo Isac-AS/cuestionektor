@@ -6,7 +6,7 @@ import Toast from './components/Toast.vue';
 import useNotifications from './services/notifications.service';
 import { OperationResult } from './models/view-models';
 import useContext from './services/context.service';
-import { CREATE_NOTIFICATION_KEY, CURRENT_QUESTIONNAIRE_ID_KEY, GET_QUESTIONS_KEY, INFORM_ABOUT_RESULT_KEY, OPEN_QUESTIONNAIRE_KEY, REFRESH_QUESTIONNAIRES_KEY, REGISTERED_QUESTIONNAIRES_KEY } from './injectionKeys';
+import { CREATE_NOTIFICATION_KEY, CURRENT_QUESTIONNAIRE_ID_KEY, GET_QUESTIONS_KEY, INFORM_ABOUT_RESULT_KEY, OPEN_QUESTIONNAIRE_KEY, REFRESH_QUESTIONNAIRES_KEY, REGISTERED_QUESTIONNAIRES_KEY, REMOVE_QUESTION_KEY } from './injectionKeys';
 
 const {
 	notifications,
@@ -19,7 +19,8 @@ const {
 	loadQuestionnaires,
 	loadedQuestions,
 	currentQuestionnaireId,
-	openQuestionnaire
+	openQuestionnaire,
+	removeQuestion	
 } = useContext();
 
 export type InformAboutResult = {
@@ -48,6 +49,7 @@ provide(REFRESH_QUESTIONNAIRES_KEY, loadQuestionnaires);
 provide(CURRENT_QUESTIONNAIRE_ID_KEY, currentQuestionnaireId);
 provide(GET_QUESTIONS_KEY, loadedQuestions);
 provide(OPEN_QUESTIONNAIRE_KEY, openQuestionnaire);
+provide(REMOVE_QUESTION_KEY, removeQuestion);
 
 onMounted(() => {
 	loadQuestionnaires();
