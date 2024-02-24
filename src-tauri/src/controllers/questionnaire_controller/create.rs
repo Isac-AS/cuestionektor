@@ -72,3 +72,39 @@ pub fn create_questionnaire(
         }
     }
 }
+
+#[tauri::command]
+pub fn create_empty_questionnaire(
+    name: &str,
+    db: tauri::State<Database>,
+) -> BackendResponse<String> {
+    let rw = match db.rw_transaction() {
+        Ok(rw_t) => rw_t,
+        Err(err) => {
+            error!("Failed to create rw transaction.\nError: '{}'", err);
+            return BackendResponse::new(OperationResult::Fail, err.to_string());
+        }
+    };
+
+    let new_questionnaire = Questionnaire::new(name.to_string());
+    let new_questionnaire_id = new_questionnaire.id.to_string();
+
+    match rw.insert(new_questionnaire) {
+        Ok(()) => {}
+        Err(err) => {
+            error!("Failed to create questionnaire.\nError: '{}'", err);
+            return BackendResponse::new(OperationResult::Fail, err.to_string());
+        }
+    }
+
+    match rw.commit() {
+        Ok(()) => BackendResponse::new(
+            OperationResult::Success,
+            new_questionnaire_id,
+        ),
+        Err(err) => {
+            error!("Failed to commit rw transaction.\nError: '{}'", err);
+            return BackendResponse::new(OperationResult::Fail, err.to_string());
+        }
+    }
+}

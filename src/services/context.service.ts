@@ -1,11 +1,15 @@
 import { ref } from "vue";
 import { Question, Questionnaire } from "../models/questionnaire";
 import { getQuestionnaires, touchQuestionnaire } from "./questionnaire.service";
-import { getQuestions } from "./question.service";
+import { createEmptyQuestion, getQuestions } from "./question.service";
 
 export type LoadQuestionnaires = { (): Promise<void> };
 export type OpenQuestionnaire = { (questionnaireId: number): void };
 export type RemoveQuestion = { (question: Question): Promise<void> };
+export type ClearLoadedQuestions = { (): Promise<void> };
+export type AddEmptyQuestion = { (): Promise<void> };
+export type RefreshQuestions = { (): Promise<void> };
+
 export default function useContext() {
     const registeredQuestionnaires = ref<Questionnaire[]>();
     const loadQuestionnaires: LoadQuestionnaires = async () => {
@@ -27,7 +31,23 @@ export default function useContext() {
     }
 
     const removeQuestion: RemoveQuestion = async (question: Question) => {
-        loadedQuestions.value = loadedQuestions!.value!.filter(obj => { return obj !== question});
+        loadedQuestions.value = loadedQuestions!.value!.filter(obj => { return obj !== question });
+        loadedQuestions.value.sort(
+            (a, b) => (a.question_number > b.question_number) ? 1 : (b.question_number > a.question_number) ? -1 : 0
+        )
+    }
+
+    const addEmptyQuestion: AddEmptyQuestion = async () => {
+        createEmptyQuestion(currentQuestionnaireId.value)
+    }
+
+    const clearLoadedQuestions: ClearLoadedQuestions = async () => {
+        loadedQuestions.value = [];
+    }
+
+    const refreshQuestions: RefreshQuestions = async () => {
+        touchQuestionnaire(currentQuestionnaireId.value);
+        loadedQuestions.value = (await getQuestions(currentQuestionnaireId.value)).data;
         loadedQuestions.value.sort(
             (a, b) => (a.question_number > b.question_number) ? 1 : (b.question_number > a.question_number) ? -1 : 0
         )
@@ -39,6 +59,9 @@ export default function useContext() {
         currentQuestionnaireId,
         loadedQuestions,
         openQuestionnaire,
-        removeQuestion
+        removeQuestion,
+        clearLoadedQuestions,
+        addEmptyQuestion,
+        refreshQuestions
     }
 }

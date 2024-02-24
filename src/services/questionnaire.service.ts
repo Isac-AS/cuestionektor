@@ -10,6 +10,10 @@ export async function createQuestionnaire(questions: Question[], name: string): 
     return await invoke<BackendResponse<string>>("create_questionnaire", { questions: questions, name: name });
 }
 
+export async function createEmptyQuestionnaire(name: string): Promise<BackendResponse<string>> {
+    return await invoke<BackendResponse<string>>("create_empty_questionnaire", { name: name });
+}
+
 export async function getQuestionnaires(): Promise<BackendResponse<Questionnaire[]>> {
     return await invoke<BackendResponse<Questionnaire[]>>("get_questionnaires");
 }

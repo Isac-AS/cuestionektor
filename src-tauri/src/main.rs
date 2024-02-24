@@ -10,7 +10,8 @@ mod pdf_parser;
 use controllers::question_controller::delete::delete_question;
 use controllers::question_controller::read::get_questions;
 use controllers::question_controller::update::update_question;
-use controllers::questionnaire_controller::create::{create_questionnaire, upload_pdf};
+use controllers::question_controller::create::create_empty_question;
+use controllers::questionnaire_controller::create::{create_questionnaire, upload_pdf, create_empty_questionnaire};
 use controllers::questionnaire_controller::delete::delete_questionnaire;
 use controllers::questionnaire_controller::read::{get_questionnaire, get_questionnaires};
 use controllers::questionnaire_controller::update::{
@@ -51,7 +52,9 @@ fn main() {
             touch_questionnaire,
             delete_question,
             get_questions,
-            update_question
+            update_question,
+            create_empty_question,
+            create_empty_questionnaire
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

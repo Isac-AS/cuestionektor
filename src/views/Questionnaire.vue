@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { inject, onUnmounted, ref } from 'vue';
+import { inject, ref } from 'vue';
 import { AnswerState, Question } from '../models/questionnaire';
-import { GET_QUESTIONS_KEY, REFRESH_QUESTIONNAIRES_KEY } from '../injectionKeys';
-import { LoadQuestionnaires } from '../services/context.service';
+import { ADD_EMPTY_QUESTION_KEY, GET_QUESTIONS_KEY, REFRESH_QUESTIONS_KEY } from '../injectionKeys';
 import QuestionComponent from '../components/QuestionComponent.vue';
 import EditableQuestion from '../components/EditableQuestion.vue'
 import icons from '../assets/icons';
+import { AddEmptyQuestion, RefreshQuestions } from '../services/context.service';
 
 // Injections
-const loadQuestionnaires = inject<LoadQuestionnaires>(REFRESH_QUESTIONNAIRES_KEY);
 const questions = inject<Question[]>(GET_QUESTIONS_KEY);
+const addEmptyQuestion = inject<AddEmptyQuestion>(ADD_EMPTY_QUESTION_KEY);
+const refreshQuestions = inject<RefreshQuestions>(REFRESH_QUESTIONS_KEY);
 
 // Filter sidebar
 const filtersExpanded = ref(false);
@@ -84,9 +85,10 @@ function updateEndIndex() {
     endIndex.value = startIndex.value + questionsPerPage.value;
 }
 
-onUnmounted(() => {
-    loadQuestionnaires!();
-})
+function createEmptyQuestion() {
+    addEmptyQuestion!();
+    refreshQuestions!();
+}
 </script>
 
 <template>
@@ -97,6 +99,9 @@ onUnmounted(() => {
             </div>
         </div>
         <div v-else class="flex flex-col w-full p-6 gap-12">
+            <button class="bg-surface-dp24 hover:brightness-125 p-2 rounded-md w-11 self-center" @click="createEmptyQuestion()">
+                <img src="/src/assets/icons/add.svg" class="invert w-5 lg:w-7">
+            </button>
             <div v-for="question in questions?.filter((q) => applyTopicFilter(q)).slice(startIndex, endIndex)">
                 <EditableQuestion v-bind:question="question" v-bind:showAnswersInGrid="showAnswersInGrid" />
             </div>

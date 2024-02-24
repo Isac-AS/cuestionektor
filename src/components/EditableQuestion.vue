@@ -23,6 +23,7 @@ const editingTopic = ref(false);
 const editingExplanation = ref(false);
 const explanation = computed(() => marked.parse(props.question.explanation));
 
+const tempQuestionNumber = ref<number>(0);
 const tempHeading = ref('');
 const tempAnswer = ref('');
 const tempPrefix = ref('');
@@ -75,13 +76,17 @@ async function removeQuestion() {
         <div class="flex justify-between">
             <h1 v-if="!editingHeading"
                 class="text-2xl font-semibold text-justify rounded shadow-lg dark:bg-surface-dp8 p-2 max-w-[90%]">
-                {{ props.question.heading }}
+                Numero: "{{ props.question.question_number }}" - Enunciado: "{{ props.question.heading }}"
             </h1>
-            <input type="text" v-else v-model="tempHeading"
-                class="rounded w-3/4 self-center p-2 text-OnPrimary dark:bg-gray-200 focus:outline-secondary text-xl">
+            <div v-else class="w-full flex">
+                <input type="number" v-model="tempQuestionNumber"
+                    class="rounded mr-10 w-1/12 self-center p-2 text-OnPrimary dark:bg-gray-200 focus:outline-secondary text-xl">
+                <input type="text" v-model="tempHeading"
+                    class="rounded w-3/4 self-center p-2 text-OnPrimary dark:bg-gray-200 focus:outline-secondary text-xl">
+            </div>
             <div v-if="!editingHeading" class="flex gap-4">
                 <button class="bg-surface-dp24 hover:brightness-125 p-2 rounded-md"
-                    @click="editingHeading = true; tempHeading = props.question.heading;">
+                    @click="editingHeading = true; tempHeading = props.question.heading; tempQuestionNumber = props.question.question_number">
                     <img :src="icons.edit" class="invert w-5 lg:w-7">
                 </button>
                 <button class="bg-wm-error hover:brightness-125 p-2 rounded-md" @click="removeQuestion()">
@@ -90,7 +95,7 @@ async function removeQuestion() {
             </div>
             <div v-if="editingHeading" class="flex gap-4">
                 <button class="bg-surface-dp24 hover:brightness-125 p-2 rounded-md"
-                    @click="props.question.heading = tempHeading; editingHeading = false; saveQuestion()">
+                    @click="props.question.heading = tempHeading; props.question.question_number = tempQuestionNumber; editingHeading = false; saveQuestion()">
                     <img :src="icons.done" class="invert w-5 lg:w-7">
                 </button>
                 <button class="bg-surface-dp24 hover:brightness-125 p-2 rounded-md" @click="editingHeading = false">

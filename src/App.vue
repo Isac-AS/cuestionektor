@@ -6,7 +6,7 @@ import Toast from './components/Toast.vue';
 import useNotifications from './services/notifications.service';
 import { OperationResult } from './models/view-models';
 import useContext from './services/context.service';
-import { CREATE_NOTIFICATION_KEY, CURRENT_QUESTIONNAIRE_ID_KEY, GET_QUESTIONS_KEY, INFORM_ABOUT_RESULT_KEY, OPEN_QUESTIONNAIRE_KEY, REFRESH_QUESTIONNAIRES_KEY, REGISTERED_QUESTIONNAIRES_KEY, REMOVE_QUESTION_KEY } from './injectionKeys';
+import { ADD_EMPTY_QUESTION_KEY, CLEAR_LOADED_QUESTIONS_KEY, CREATE_NOTIFICATION_KEY, CURRENT_QUESTIONNAIRE_ID_KEY, GET_QUESTIONS_KEY, INFORM_ABOUT_RESULT_KEY, OPEN_QUESTIONNAIRE_KEY, REFRESH_QUESTIONNAIRES_KEY, REFRESH_QUESTIONS_KEY, REGISTERED_QUESTIONNAIRES_KEY, REMOVE_QUESTION_KEY } from './injectionKeys';
 
 const {
 	notifications,
@@ -20,7 +20,10 @@ const {
 	loadedQuestions,
 	currentQuestionnaireId,
 	openQuestionnaire,
-	removeQuestion	
+	removeQuestion,
+	clearLoadedQuestions,
+	addEmptyQuestion,
+	refreshQuestions
 } = useContext();
 
 export type InformAboutResult = {
@@ -50,6 +53,9 @@ provide(CURRENT_QUESTIONNAIRE_ID_KEY, currentQuestionnaireId);
 provide(GET_QUESTIONS_KEY, loadedQuestions);
 provide(OPEN_QUESTIONNAIRE_KEY, openQuestionnaire);
 provide(REMOVE_QUESTION_KEY, removeQuestion);
+provide(CLEAR_LOADED_QUESTIONS_KEY, clearLoadedQuestions);
+provide(ADD_EMPTY_QUESTION_KEY, addEmptyQuestion);
+provide(REFRESH_QUESTIONS_KEY, refreshQuestions);
 
 onMounted(() => {
 	loadQuestionnaires();
